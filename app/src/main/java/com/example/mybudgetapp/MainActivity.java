@@ -19,7 +19,7 @@ import com.example.mybudgetapp.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
-    private ActivityMainBinding binding;
+    private ActivityMainBinding binding, binding2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
