@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="250sp"
+        android:src="@drawable/budget_icon"
+        android:layout_above="@id/title"/>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/usernameLabel"
+        android:layout_centerHorizontal="true"
+        android:text="MyBudget App"
+        android:textAlignment="center"
+        android:textStyle="bold|italic"
+        android:textSize="50sp" />
+
+    <TextView
+        android:id="@+id/usernameLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/username_editText"
+        android:layout_marginStart="57dp"
+        android:layout_marginTop="15dp"
+        android:text="Username" />
+
+    <EditText
+        android:id="@+id/username_editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="50dp"
+        android:hint="Username"
+        android:maxLines="1"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/passwordlabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/username_editText"
+        android:layout_marginStart="57dp"
+        android:layout_marginTop="25dp"
+        android:text="Password" />
+
+    <EditText
+        android:id="@+id/password_editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/passwordlabel"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="50dp"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/loginButton"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/password_editText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:text="Login"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/Registertextview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/loginButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="Create an account?"
+        android:onClick="registerPage"
+        android:textSize="14sp" />
+
+</RelativeLayout>
