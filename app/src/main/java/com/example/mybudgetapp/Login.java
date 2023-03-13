@@ -88,7 +88,7 @@ public class Login extends AppCompatActivity {
                                                 user.setFull_name(document.getString("fullname"));
                                                 user.setIs_login(true);
 
-                                                Intent intent = new Intent(Login.this, MainActivity.class);
+                                                Intent intent = new Intent(Login.this, Home.class);
                                                 startActivity(intent);
                                             }
                                         }
