@@ -21,7 +21,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-public class Login extends AppCompatActivity {
+public class LoginActivty extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +32,7 @@ public class Login extends AppCompatActivity {
         //check if user has logged in
         User user = User.getUser_instance();
         if(user.getIs_login()){
-            Intent intent = new Intent(Login.this, MainActivity.class);
+            Intent intent = new Intent(LoginActivty.this, MainActivity.class);
             startActivity(intent);
         }
         try
@@ -49,7 +49,7 @@ public class Login extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Login.this, Register.class);
+                Intent intent = new Intent(LoginActivty.this, RegisterActivity.class);
                 startActivity(intent);
             }
         });
@@ -78,7 +78,7 @@ public class Login extends AppCompatActivity {
                                         //check if user account exist
                                         if(task.getResult().isEmpty()){
                                             ViewDialog alert = new ViewDialog();
-                                            alert.showDialog(Login.this, "Incorrect credential, please try again");
+                                            alert.showDialog(LoginActivty.this, "Incorrect credential, please try again");
                                         }
                                         else{
                                             for (QueryDocumentSnapshot document : task.getResult()) {
@@ -88,7 +88,7 @@ public class Login extends AppCompatActivity {
                                                 user.setFull_name(document.getString("fullname"));
                                                 user.setIs_login(true);
 
-                                                Intent intent = new Intent(Login.this, Home.class);
+                                                Intent intent = new Intent(LoginActivty.this, Home.class);
                                                 startActivity(intent);
                                             }
                                         }
