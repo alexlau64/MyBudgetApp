@@ -40,7 +40,6 @@ public class RegisterActivity extends AppCompatActivity {
         final EditText confirmpasswordtxt = (EditText) findViewById(R.id.confirm_password_editText);
         final TextView backtologin = (TextView) findViewById(R.id.back_to_login);
         Button btnRegister = (Button) findViewById(R.id.registerButton);
-        final String tempID;
         backtologin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -91,22 +90,6 @@ public class RegisterActivity extends AppCompatActivity {
                                     budget.put("amount", "");
                                     budget.put("start_date", "");
                                     budget.put("end_date", "");
-
-                                    db.collection("budget")
-                                            .add(budget)
-                                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                                @Override
-                                                public void onSuccess(DocumentReference documentReference) {
-                                                    Intent intent = new Intent(RegisterActivity.this, LoginActivty.class);
-                                                    startActivity(intent);
-                                                }
-                                            })
-                                            .addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Toast.makeText(getApplicationContext(), "Registration Fail", Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
