@@ -12,6 +12,12 @@
         android:theme="@style/Theme.MyBudgetApp"
         tools:targetApi="31">
         <activity
+            android:name=".WelcomeBack"
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivty"
+            android:exported="false" />
+        <activity
             android:name=".AddCategory"
             android:exported="false" />
         <activity
@@ -30,13 +36,12 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivty"
+            android:name=".LaunchScreen"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.MyBudgetApp.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
