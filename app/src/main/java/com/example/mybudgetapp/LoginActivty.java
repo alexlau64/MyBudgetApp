@@ -6,6 +6,9 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -41,7 +44,38 @@ public class LoginActivty extends AppCompatActivity {
         }
         catch (NullPointerException e){}
 
-        final EditText usernametxt = (EditText) findViewById(R.id.username_editText);
+        EditText passwordEditText = findViewById(R.id.edt_password);
+        passwordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        passwordEditText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.hidden, 0);
+        passwordEditText.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_RIGHT = 2;
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getRawX() >= (passwordEditText.getRight() - passwordEditText.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        if (passwordEditText.getTransformationMethod() instanceof PasswordTransformationMethod) {
+                            // Show the password
+                            passwordEditText.setTransformationMethod(null);
+                            passwordEditText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.hidden, 0);
+                        } else {
+                            // Hide the password
+                            passwordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                            passwordEditText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.hidden, 0);
+                        }
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+
+
+
+
+
+
+        /*final EditText usernametxt = (EditText) findViewById(R.id.username_editText);
         final EditText passwordtxt = (EditText) findViewById(R.id.password_editText);
         final TextView btnRegister = (TextView) findViewById(R.id.Registertextview);
         Button btnLogin = (Button) findViewById(R.id.loginButton);
@@ -124,6 +158,6 @@ public class LoginActivty extends AppCompatActivity {
                 }
             });
             dialog.show();
-        }
+        }*/
     }
 }
