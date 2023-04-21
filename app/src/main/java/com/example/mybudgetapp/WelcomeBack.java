@@ -21,11 +21,20 @@ public class WelcomeBack extends AppCompatActivity {
         catch (NullPointerException e){}
 
         Button signInButton = findViewById(R.id.sign_in);
+        Button signUpButton = findViewById(R.id.sign_up);
 
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(WelcomeBack.this, LoginActivty.class);
+                startActivity(intent);
+            }
+        });
+
+        signUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(WelcomeBack.this, RegisterActivity.class);
                 startActivity(intent);
             }
         });

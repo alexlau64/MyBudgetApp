@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="300dp"
-        android:layout_alignParentTop="true"
+        android:gravity="center"
         android:text="Sign In"
         android:textColor="#3A3A3A"
         android:textSize="28sp"
@@ -48,6 +48,7 @@
         android:layout_marginTop="10dp"
         android:fontFamily="@font/montserrat"
         android:hint="Username"
+        android:inputType="text"
         android:textSize="16sp"
         android:textColor="#3A3A3A" />
 
@@ -73,6 +74,7 @@
         android:drawableRight="@drawable/hidden"
         android:fontFamily="@font/montserrat"
         android:hint="Password"
+        android:inputType="textPassword"
         android:textSize="16sp"
         android:textColor="#3A3A3A" />
 

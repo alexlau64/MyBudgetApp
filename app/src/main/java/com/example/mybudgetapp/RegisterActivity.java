@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.PasswordTransformationMethod;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,12 +28,65 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         try
         {
             this.getSupportActionBar().hide();
         }
         catch (NullPointerException e){}
+
+        EditText passwordEditText = findViewById(R.id.edt_password);
+        passwordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        passwordEditText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.hidden, 0);
+        EditText cpasswordEditText = findViewById(R.id.edt_cpassword);
+        cpasswordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        cpasswordEditText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.hidden, 0);
+        passwordEditText.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_RIGHT = 2;
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getRawX() >= (passwordEditText.getRight() - passwordEditText.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        if (passwordEditText.getTransformationMethod() instanceof PasswordTransformationMethod) {
+                            // Show the password
+                            passwordEditText.setTransformationMethod(null);
+                            passwordEditText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.hidden, 0);
+                        } else {
+                            // Hide the password
+                            passwordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                            passwordEditText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.hidden, 0);
+                        }
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+        cpasswordEditText.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_RIGHT = 2;
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getRawX() >= (cpasswordEditText.getRight() - cpasswordEditText.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        if (cpasswordEditText.getTransformationMethod() instanceof PasswordTransformationMethod) {
+                            // Show the password
+                            cpasswordEditText.setTransformationMethod(null);
+                            cpasswordEditText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.hidden, 0);
+                        } else {
+                            // Hide the password
+                            cpasswordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                            cpasswordEditText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.hidden, 0);
+                        }
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+
+        /*FirebaseFirestore db = FirebaseFirestore.getInstance();
+
 
         final EditText fullnametxt = (EditText) findViewById(R.id.fullname_editText);
         final EditText usernametxt = (EditText) findViewById(R.id.username_editText);
@@ -100,6 +155,6 @@ public class RegisterActivity extends AppCompatActivity {
                             });
                 }
             }
-        });
+        });*/
     }
 }
