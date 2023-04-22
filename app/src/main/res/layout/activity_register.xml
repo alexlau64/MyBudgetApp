@@ -14,10 +14,11 @@
 
     <TextView
         android:id="@+id/sign_up"
-        android:layout_width="315dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="30dp"
         android:layout_below="@id/image"
         android:gravity="center"
         android:text="Sign Up"
@@ -27,11 +28,12 @@
 
     <TextView
         android:id="@+id/txt_username"
-        android:layout_width="315dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/sign_up"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="15dp"
         android:fontFamily="@font/montserrat"
         android:text="Username"
         android:textColor="#B9B9B9"
@@ -39,10 +41,11 @@
 
     <EditText
         android:id="@+id/edt_username"
-        android:layout_width="315dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txt_username"
         android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
         android:layout_marginTop="10dp"
         android:fontFamily="@font/montserrat"
         android:hint="Username"
@@ -52,11 +55,12 @@
 
     <TextView
         android:id="@+id/txt_password"
-        android:layout_width="315dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/edt_username"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="10dp"
         android:fontFamily="@font/montserrat"
         android:text="Password"
         android:textColor="#B9B9B9"
@@ -64,10 +68,11 @@
 
     <EditText
         android:id="@+id/edt_password"
-        android:layout_width="315dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txt_password"
         android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
         android:layout_marginTop="10dp"
         android:drawableRight="@drawable/hidden"
         android:fontFamily="@font/montserrat"
@@ -78,11 +83,12 @@
 
     <TextView
         android:id="@+id/txt_cpassword"
-        android:layout_width="315dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/edt_password"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="15dp"
         android:fontFamily="@font/montserrat"
         android:text="Password"
         android:textColor="#B9B9B9"
@@ -90,11 +96,12 @@
 
     <EditText
         android:id="@+id/edt_cpassword"
-        android:layout_width="315dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txt_cpassword"
         android:layout_marginStart="30dp"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="30dp"
         android:drawableRight="@drawable/hidden"
         android:fontFamily="@font/montserrat"
         android:hint="Password"
@@ -108,10 +115,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/edt_cpassword"
         android:layout_marginTop="50dp"
-        android:layout_marginStart="30dp"
+        android:layout_centerHorizontal="true"
         android:background="@drawable/rectangle_1"
         android:drawableRight="@drawable/arrow_right"
-        android:drawablePadding="10dp"
         android:gravity="left|center_vertical"
         android:paddingLeft="30dp"
         android:paddingEnd="30dp"

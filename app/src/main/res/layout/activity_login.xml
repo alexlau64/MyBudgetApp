@@ -11,15 +11,14 @@
         android:layout_centerHorizontal="true"
         android:layout_marginStart="128dp"
         android:layout_marginTop="97dp"
-        android:layout_marginEnd="133dp"
-        android:layout_marginBottom="484dp"
         android:background="@drawable/budget_icon" />
 
     <TextView
         android:id="@+id/sign_in"
-        android:layout_width="315dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
         android:layout_marginTop="300dp"
         android:gravity="center"
         android:text="Sign In"
@@ -29,11 +28,12 @@
 
     <TextView
         android:id="@+id/txt_username"
-        android:layout_width="315dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/sign_in"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="30dp"
         android:fontFamily="@font/montserrat"
         android:text="Username"
         android:textColor="#B9B9B9"
@@ -41,11 +41,12 @@
 
     <EditText
         android:id="@+id/edt_username"
-        android:layout_width="315dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txt_username"
         android:layout_marginStart="30dp"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="30dp"
         android:fontFamily="@font/montserrat"
         android:hint="Username"
         android:inputType="text"
@@ -54,11 +55,12 @@
 
     <TextView
         android:id="@+id/txt_password"
-        android:layout_width="315dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/edt_username"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="30dp"
         android:fontFamily="@font/montserrat"
         android:text="Password"
         android:textColor="#B9B9B9"
@@ -66,12 +68,14 @@
 
     <EditText
         android:id="@+id/edt_password"
-        android:layout_width="315dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txt_password"
         android:layout_marginStart="30dp"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="30dp"
         android:drawableRight="@drawable/hidden"
+        android:paddingEnd="10dp"
         android:fontFamily="@font/montserrat"
         android:hint="Password"
         android:inputType="textPassword"
@@ -84,7 +88,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/edt_password"
         android:layout_marginTop="50dp"
-        android:layout_marginStart="30dp"
+        android:layout_centerHorizontal="true"
         android:background="@drawable/rectangle_1"
         android:drawableRight="@drawable/arrow_right"
         android:drawablePadding="10dp"

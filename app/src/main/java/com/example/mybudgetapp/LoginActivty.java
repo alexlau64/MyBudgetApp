@@ -31,13 +31,12 @@ public class LoginActivty extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-
-        //check if user has logged in
         User user = User.getUser_instance();
         if(user.getIs_login()){
             Intent intent = new Intent(LoginActivty.this, MainActivity.class);
             startActivity(intent);
         }
+
         try
         {
             this.getSupportActionBar().hide();
@@ -70,34 +69,19 @@ public class LoginActivty extends AppCompatActivity {
             }
         });
 
-
-
-
-
-
-        /*final EditText usernametxt = (EditText) findViewById(R.id.username_editText);
-        final EditText passwordtxt = (EditText) findViewById(R.id.password_editText);
-        final TextView btnRegister = (TextView) findViewById(R.id.Registertextview);
-        Button btnLogin = (Button) findViewById(R.id.loginButton);
-
-        btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LoginActivty.this, RegisterActivity.class);
-                startActivity(intent);
-            }
-        });
+        EditText txtusername = (EditText) findViewById(R.id.edt_username);
+        EditText txtpassword = (EditText) findViewById(R.id.edt_password);
+        Button btnSignIn = (Button) findViewById(R.id.btnsign_in);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        btnLogin.setOnClickListener(new View.OnClickListener() {
+
+        btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String username = usernametxt.getText().toString();
-                String password = passwordtxt.getText().toString();
-
-                //check if EditText fields are empty
+                String username = txtusername.getText().toString();
+                String password = txtpassword.getText().toString();
                 if (username.matches("")) {
-                    Toast.makeText(getApplicationContext(), "Please enter your email", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Please enter your username", Toast.LENGTH_SHORT).show();
                 } else if (password.matches("")) {
                     Toast.makeText(getApplicationContext(), "Please enter your password", Toast.LENGTH_SHORT).show();
                 }
@@ -109,12 +93,11 @@ public class LoginActivty extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                     if (task.isSuccessful()) {
-                                        //check if user account exist
                                         if(task.getResult().isEmpty()){
-                                            ViewDialog alert = new ViewDialog();
-                                            alert.showDialog(LoginActivty.this, "Incorrect credential, please try again");
+                                            Toast.makeText(getApplicationContext(), "Incorrect credential! Please try again", Toast.LENGTH_LONG).show();
                                         }
                                         else{
+
                                             for (QueryDocumentSnapshot document : task.getResult()) {
                                                 user.setUser_id(document.getId());
                                                 user.setUsername(document.getString("username"));
@@ -128,36 +111,12 @@ public class LoginActivty extends AppCompatActivity {
                                         }
                                     }
                                     else {
-                                        Toast.makeText(getApplicationContext(), "Incorrect credential, please try again", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getApplicationContext(), "Incorrect credential! Please try again", Toast.LENGTH_LONG).show();
                                     }
                                 }
                             });
                 }
             }
         });
-    }
-
-
-
-    public class ViewDialog {
-        public void showDialog(Activity activity, String msg){
-
-            final Dialog dialog = new Dialog(activity);
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            dialog.setCancelable(false);
-            dialog.setContentView(R.layout.dialog_error);
-
-            TextView text = (TextView) dialog.findViewById(R.id.text_dialog);
-            text.setText(msg);
-
-            Button dialogButton = (Button) dialog.findViewById(R.id.btn_dialog);
-            dialogButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                }
-            });
-            dialog.show();
-        }*/
     }
 }
