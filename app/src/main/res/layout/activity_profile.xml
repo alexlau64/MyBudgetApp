@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <androidx.drawerlayout.widget.DrawerLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="30dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="66dp"
+                android:text="Profile"
+                android:fontFamily="@font/montserrat_bold"
+                android:textSize="40sp"
+                android:textColor="#3A3A3A" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/profile"
+                android:layout_marginStart="30dp"
+                app:srcCompat="@drawable/profileimage" />
+
+            <TextView
+                android:id="@+id/username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/profile"
+                android:layout_toEndOf="@+id/imageView"
+                android:fontFamily="@font/montserrat"
+                android:text="Username"
+                android:textColor="#000000" />
+
+            <TextView
+                android:id="@+id/txtfullname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imageView"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="30dp"
+                android:text="Full Name"
+                android:textColor="#3A3A3A"
+                android:textSize="16sp"
+                android:fontFamily="@font/montserrat" />
+
+            <TextView
+                android:id="@+id/edtfullname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txtfullname"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:text="xxx"
+                android:textColor="#2743FD"
+                android:textSize="16sp"
+                android:fontFamily="@font/montserrat" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:background="#DEE1EF"
+                android:layout_below="@id/edtfullname" />
+
+            <TextView
+                android:id="@+id/txtdob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edtfullname"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="30dp"
+                android:text="Date of Birth"
+                android:textColor="#3A3A3A"
+                android:textSize="14sp"
+                android:fontFamily="@font/montserrat" />
+
+            <TextView
+                android:id="@+id/edtdob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txtdob"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:text="xxx"
+                android:textColor="#2743FD"
+                android:textSize="14sp"
+                android:fontFamily="@font/montserrat"/>
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:background="#DEE1EF"
+                android:layout_below="@id/edtdob" />
+
+            <Button
+                android:id="@+id/btnsign_out"
+                android:layout_width="315dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/edtdob"
+                android:layout_marginTop="150dp"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/rectangle_1"
+                android:drawableRight="@drawable/arrow_right"
+                android:drawablePadding="10dp"
+                android:gravity="left|center_vertical"
+                android:paddingLeft="30dp"
+                android:paddingEnd="30dp"
+                android:text="Sign Out"
+                android:fontFamily="@font/montserrat"
+                android:textColor="#2743FB"
+                android:textSize="20sp" />
+
+        </RelativeLayout>
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/drawer"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            app:itemTextColor="#2B47FC"
+            app:headerLayout="@layout/nav_header_main"
+            app:menu="@menu/activity_main_drawer" />
+
+    </androidx.drawerlayout.widget.DrawerLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_navigation_menu" />
+
+</RelativeLayout>

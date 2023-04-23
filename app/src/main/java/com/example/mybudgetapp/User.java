@@ -4,12 +4,21 @@ public class User {
     private static User user_instance;
     private static String user_id;
     private static String username;
-    private static String email;
     private static String full_name;
     private static boolean is_login = false;
 
     public static User getUser_instance() {
+        if(user_instance == null){
+            user_instance = new User();
+        }
         return user_instance;
+    }
+
+    public static void unset_user_session(){
+        User.user_id = null;
+        User.full_name = null;
+        User.username = null;
+        User.is_login = false;
     }
 
     public static void setUser_instance(User user_instance) {
@@ -30,14 +39,6 @@ public class User {
 
     public static void setUsername(String username) {
         User.username = username;
-    }
-
-    public static String getEmail() {
-        return email;
-    }
-
-    public static void setEmail(String email) {
-        User.email = email;
     }
 
     public static String getFull_name() {

@@ -101,7 +101,6 @@ public class LoginActivty extends AppCompatActivity {
                                             for (QueryDocumentSnapshot document : task.getResult()) {
                                                 user.setUser_id(document.getId());
                                                 user.setUsername(document.getString("username"));
-                                                user.setEmail(document.getString("email"));
                                                 user.setFull_name(document.getString("fullname"));
                                                 user.setIs_login(true);
 
