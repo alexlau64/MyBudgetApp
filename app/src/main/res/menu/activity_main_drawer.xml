@@ -5,16 +5,20 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_home"
+            android:id="@+id/nav_budgets"
             android:icon="@drawable/budget"
-            android:title="Home" />
+            android:title="Budgets" />
         <item
-            android:id="@+id/nav_budget"
+            android:id="@+id/nav_expenses"
             android:icon="@drawable/budget"
-            android:title="Budget" />
+            android:title="Expenses" />
         <item
-            android:id="@+id/nav_category"
+            android:id="@+id/nav_categories"
             android:icon="@drawable/categories"
-            android:title="Category" />
+            android:title="Categories" />
+        <item
+            android:id="@+id/nav_predictions"
+            android:icon="@drawable/categories"
+            android:title="Prediction and Recommendation" />
     </group>
 </menu>

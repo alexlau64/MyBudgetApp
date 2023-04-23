@@ -33,15 +33,19 @@ public class BudgetActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.nav_home:
+                    case R.id.nav_budgets:
                         startActivity(new Intent(getApplicationContext(),Home.class));
                         overridePendingTransition(0,0);
                         return true;
-                    case R.id.nav_budget:
+                    case R.id.nav_expenses:
                         startActivity(new Intent(getApplicationContext(), BudgetActivity.class));
                         overridePendingTransition(0,0);
                         return true;
-                    case R.id.nav_category:
+                    case R.id.nav_categories:
+                        startActivity(new Intent(getApplicationContext(), CategoryActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                    case R.id.nav_predictions:
                         startActivity(new Intent(getApplicationContext(), CategoryActivity.class));
                         overridePendingTransition(0,0);
                         return true;
