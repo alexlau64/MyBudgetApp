@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -112,6 +113,16 @@ public class Home extends AppCompatActivity {
                 return false;
             }
         });
+
+        ImageView img = findViewById(R.id.profileimage);
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Home.this, EditProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     @Override

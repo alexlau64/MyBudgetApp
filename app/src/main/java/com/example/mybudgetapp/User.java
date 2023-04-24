@@ -5,6 +5,7 @@ public class User {
     private static String user_id;
     private static String username;
     private static String full_name;
+    private static String dob;
     private static boolean is_login = false;
 
     public static User getUser_instance() {
@@ -49,6 +50,14 @@ public class User {
         User.full_name = full_name;
     }
 
+    public static String getDob() {
+        return dob;
+    }
+
+    public static void setDob(String dob) {
+        User.dob = dob;
+    }
+
     public static boolean getIs_login() {
         return is_login;
     }
@@ -56,5 +65,4 @@ public class User {
     public static void setIs_login(boolean is_login) {
         User.is_login = is_login;
     }
-
 }

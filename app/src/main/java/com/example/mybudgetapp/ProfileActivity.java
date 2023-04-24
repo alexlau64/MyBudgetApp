@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -19,7 +20,17 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        TextView edtusername = findViewById(R.id.username);
+        TextView edtfullname = findViewById(R.id.edtfullname);
+        TextView edtdob = findViewById(R.id.edtdob);
+
         User user = User.getUser_instance();
+        String fullname = user.getFull_name();
+        String username = user.getUsername();
+        String dob = user.getDob();
+        edtusername.setText(username);
+        edtfullname.setText(fullname);
+        edtdob.setText(dob);
 
         try
         {
