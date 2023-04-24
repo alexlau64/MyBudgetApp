@@ -120,6 +120,8 @@ public class RegisterActivity extends AppCompatActivity {
                                             Map<String, Object> user = new HashMap<>();
                                             user.put("username", username);
                                             user.put("password", password);
+                                            user.put("fullname", "");
+                                            user.put("dob", "");
 
                                             db.collection("users")
                                                     .add(user)

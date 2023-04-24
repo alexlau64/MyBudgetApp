@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -20,7 +21,7 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        TextView edtusername = findViewById(R.id.username);
+        TextView edtusername = findViewById(R.id.edtusername);
         TextView edtfullname = findViewById(R.id.edtfullname);
         TextView edtdob = findViewById(R.id.edtdob);
 

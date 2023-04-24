@@ -1,8 +1,9 @@
 package com.example.mybudgetapp;
 
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -10,19 +11,46 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.OnProgressListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.io.IOException;
+import java.util.UUID;
 
 public class EditProfileActivity extends AppCompatActivity {
-    private static final int PICK_IMAGE_REQUEST = 1;
-    private ImageView imageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
         User user = User.getUser_instance();
+        String user_id = user.getUser_id();
+        String username = user.getUsername();
+        String fullname = user.getFull_name();
+        String dob = user.getDob();
+
+        EditText edtusername = findViewById(R.id.edtusername);
+        EditText edtfullname = findViewById(R.id.edtfullname);
+        EditText edtdob = findViewById(R.id.edtdob);
+
+        edtusername.setText(username);
+        edtfullname.setText(fullname);
+        edtdob.setText(dob);
 
         try
         {
@@ -30,39 +58,39 @@ public class EditProfileActivity extends AppCompatActivity {
         }
         catch (NullPointerException e){}
 
-        ImageView imageView = findViewById(R.id.imageView);
-        imageView.setOnClickListener(view -> openGallery());
-
-        Button btnsignout = findViewById(R.id.btnsign_out);
-        btnsignout.setOnClickListener(new View.OnClickListener() {
+        Button btncomplete = findViewById(R.id.btncomplete);
+        btncomplete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                user.unset_user_session();
-                Intent intent = new Intent(EditProfileActivity.this, LoginActivty.class);
-                startActivity(intent);
+                String txtusername = edtusername.getText().toString();
+                String txtfullname = edtfullname.getText().toString();
+                String txtdob = edtdob.getText().toString();
+
+                if (txtusername.matches("")) {
+                    Toast.makeText(getApplicationContext(), "Please enter your username", Toast.LENGTH_SHORT).show();
+                } else if (txtfullname.matches("")) {
+                    Toast.makeText(getApplicationContext(), "Please enter your full name", Toast.LENGTH_SHORT).show();
+                } else if (txtdob.matches("")) {
+                    Toast.makeText(getApplicationContext(), "Please enter your date of birth", Toast.LENGTH_SHORT).show();
+                } else {
+                    db.collection("users")
+                            .document(user_id)
+                            .update(
+                                    "fullname", txtfullname,
+                                    "dob", txtdob,
+                                    "username", txtusername
+                            );
+
+                    //edit current user session data
+                    User user = User.getUser_instance();
+                    user.setUsername(txtusername);
+                    user.setDob(txtdob);
+                    user.setFull_name(txtfullname);
+
+                    Toast.makeText(getApplicationContext(), "Profile updated successfully", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
             }
         });
     }
-
-    private void openGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, PICK_IMAGE_REQUEST);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            Uri uri = data.getData();
-
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                imageView.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
 }
