@@ -9,23 +9,14 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -121,7 +112,7 @@ public class CategoryActivity extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(CategoryActivity.this, AddCategory.class);
+                Intent intent = new Intent(CategoryActivity.this, CategoryAdd.class);
                 startActivity(intent);
             }
         });
@@ -134,54 +125,6 @@ public class CategoryActivity extends AppCompatActivity {
             }
         });
     }
-
-    /*private void loadDatainGridView() {
-        // below line is use to get data from Firebase
-        // firestore using collection in android.
-        db.collection("category")
-                .whereEqualTo("user_id", User.getUser_id())
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        // after getting the data we are calling on success method
-                        // and inside this method we are checking if the received
-                        // query snapshot is empty or not.
-                        if (!queryDocumentSnapshots.isEmpty()) {
-                            // if the snapshot is not empty we are hiding our
-                            // progress bar and adding our data in a list.
-                            List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
-                            for (DocumentSnapshot d : list) {
-
-                                // after getting this list we are passing
-                                // that list to our object class.
-                                Category dataModal = d.toObject(Category.class);
-
-                                // after getting data from Firebase
-                                // we are storing that data in our array list
-                                arrayList.add(dataModal);
-                            }
-                            // after that we are passing our array list to our adapter class.
-                            CategoryGridViewAdapter adapter = new CategoryGridViewAdapter(CategoryActivity.this, arrayList);
-
-                            // after passing this array list
-                            // to our adapter class we are setting
-                            // our adapter to our list view.
-                            coursesGV.setAdapter(adapter);
-                        } else {
-                            // if the snapshot is empty we are displaying a toast message.
-                            Toast.makeText(CategoryActivity.this, "No data found in Database", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // we are displaying a toast message
-                        // when we get any error from Firebase.
-                        Toast.makeText(CategoryActivity.this, "Fail to load data..", Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -198,7 +141,7 @@ public class CategoryActivity extends AppCompatActivity {
 
         int id = item.getItemId();
         if (id == R.id.btn_add) {
-            Intent intent = new Intent(this, AddCategory.class);
+            Intent intent = new Intent(this, CategoryAdd.class);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);

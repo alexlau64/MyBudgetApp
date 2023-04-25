@@ -6,19 +6,27 @@
     android:layout_gravity="center"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="4dp">
+    android:padding="5dp">
 
-        <TextView
-            android:id="@+id/txtname"
+        <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:gravity="center"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:background="@drawable/box1"
-            android:textSize="18sp" />
+            android:layout_margin="5dp"
+            app:cardCornerRadius="25dp"
+            app:cardElevation="5dp">
+
+                <TextView
+                    android:id="@+id/txtname"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_columnWeight="1"
+                    android:layout_rowWeight="1"
+                    android:gravity="center"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:background="@drawable/box1"
+                    android:textSize="16sp" />
+
+        </androidx.cardview.widget.CardView>
 
 </LinearLayout>
