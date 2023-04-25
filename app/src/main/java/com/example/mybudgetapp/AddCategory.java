@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
@@ -35,12 +36,17 @@ public class AddCategory extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_category);
-        getSupportActionBar().setTitle("Add Category");
+
+        try
+        {
+            this.getSupportActionBar().hide();
+        }
+        catch (NullPointerException e){}
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        final EditText txtname = (EditText) findViewById(R.id.txt_name);
-        final EditText txtdescription = (EditText) findViewById(R.id.txt_description);
-        final Button btnsave = (Button) findViewById(R.id.btn_save);
+        final EditText txtname = (EditText) findViewById(R.id.edt_name);
+        final EditText txtdescription = (EditText) findViewById(R.id.edt_description);
+        final Button btnsave = (Button) findViewById(R.id.btncomplete);
 
         btnsave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,6 +83,14 @@ public class AddCategory extends AppCompatActivity {
                                 }
                             });
                 }
+            }
+        });
+
+        ImageView img = findViewById(R.id.back);
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }

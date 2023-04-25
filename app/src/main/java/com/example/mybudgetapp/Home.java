@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -82,7 +83,7 @@ public class Home extends AppCompatActivity {
                         overridePendingTransition(0,0);
                         return true;
                     case R.id.nav_predictions:
-                        startActivity(new Intent(getApplicationContext(), CategoryActivity.class));
+                        startActivity(new Intent(getApplicationContext(), BudgetActivity.class));
                         overridePendingTransition(0,0);
                         return true;
                     default:
@@ -101,6 +102,8 @@ public class Home extends AppCompatActivity {
                 switch(item.getItemId())
                 {
                     case R.id.navigation_home:
+                        startActivity(new Intent(getApplicationContext(),Home.class));
+                        overridePendingTransition(0,0);
                         return true;
                     case R.id.navigation_analytics:
                         startActivity(new Intent(getApplicationContext(),Home.class));
@@ -123,7 +126,6 @@ public class Home extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
     }
 
     @Override

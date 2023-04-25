@@ -128,32 +128,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                         @Override
                                                         public void onSuccess(DocumentReference documentReference) {
-                                                            Toast.makeText(getApplicationContext(), "Registration Complete", Toast.LENGTH_LONG).show();
-                                                            //add empty symptom table
-                                                            Map<String, Object> budget = new HashMap<>();
-                                                            budget.put("user_id", documentReference.getId());
-                                                            budget.put("budget_id", "");
-                                                            budget.put("budget_name", "");
-                                                            budget.put("description", "");
-                                                            budget.put("amount", "");
-                                                            budget.put("month", "");
-                                                            budget.put("category", "");
-
-                                                            db.collection("budget")
-                                                                    .add(budget)
-                                                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                                                        @Override
-                                                                        public void onSuccess(DocumentReference documentReference) {
-                                                                            Intent intent = new Intent(RegisterActivity.this, LoginActivty.class);
-                                                                            startActivity(intent);
-                                                                        }
-                                                                    })
-                                                                    .addOnFailureListener(new OnFailureListener() {
-                                                                        @Override
-                                                                        public void onFailure(@NonNull Exception e) {
-                                                                            Toast.makeText(getApplicationContext(), "Registration Fail", Toast.LENGTH_SHORT).show();
-                                                                        }
-                                                                    });
+                                                            Toast.makeText(getApplicationContext(), "Registration Successfull", Toast.LENGTH_SHORT).show();
                                                         }
                                                     })
                                                     .addOnFailureListener(new OnFailureListener() {
