@@ -36,6 +36,7 @@ public class CategoryAdd extends AppCompatActivity {
         catch (NullPointerException e){}
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+
         final EditText txtname = (EditText) findViewById(R.id.edt_name);
         final EditText txtdescription = (EditText) findViewById(R.id.edt_description);
         final Button btnsave = (Button) findViewById(R.id.btncomplete);
@@ -52,7 +53,7 @@ public class CategoryAdd extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Please enter your email", Toast.LENGTH_SHORT).show();
                 } else {
                     User user = User.getUser_instance();
-                    String id = UUID.randomUUID().toString();// generate new ID for the document
+                    String id = UUID.randomUUID().toString();
                     Map<String, Object> category = new HashMap<>();
                     category.put("category_id", id);
                     category.put("category_name", name);

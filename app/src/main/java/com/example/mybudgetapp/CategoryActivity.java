@@ -45,14 +45,15 @@ public class CategoryActivity extends AppCompatActivity {
         }
         catch (NullPointerException e){}
 
-        drawerLayout = findViewById(R.id.drawer_layout);
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        actionBarDrawerToggle.syncState();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Category category = Category.getCategory_instance();
 
-        NavigationView navigationView = findViewById(R.id.drawer);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        //drawerLayout = findViewById(R.id.drawer_layout);
+        //actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
+        //drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        //actionBarDrawerToggle.syncState();
+
+        //NavigationView navigationView = findViewById(R.id.drawer);
+        /*navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
@@ -76,13 +77,13 @@ public class CategoryActivity extends AppCompatActivity {
                         return false;
                 }
             }
-        });
+        });*/
 
 
         gridView = findViewById(R.id.grid_layout);
         dataList = new ArrayList<>();
         adapter = new CategoryGridViewAdapter(this, dataList);
-        gridView.setAdapter(adapter);
+
 
         db.collection("category")
                 .whereEqualTo("user_id", User.getUser_id())
@@ -96,6 +97,8 @@ public class CategoryActivity extends AppCompatActivity {
                                 Category dataClass = d.toObject(Category.class);
                                 dataList.add(dataClass);
                             }
+                            CategoryGridViewAdapter adapter = new CategoryGridViewAdapter(CategoryActivity.this, dataList);
+                            gridView.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
                         } else {
                             Toast.makeText(CategoryActivity.this, "No data found in Database", Toast.LENGTH_SHORT).show();
