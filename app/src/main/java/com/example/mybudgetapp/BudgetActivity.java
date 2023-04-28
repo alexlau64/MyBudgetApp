@@ -7,61 +7,50 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.Spinner;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class BudgetActivity extends AppCompatActivity {
-    public DrawerLayout drawerLayout;
-    public ActionBarDrawerToggle actionBarDrawerToggle;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_budget);
-        getSupportActionBar().setTitle("Category");
 
-        drawerLayout = findViewById(R.id.drawer_layout);
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        actionBarDrawerToggle.syncState();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        try
+        {
+            this.getSupportActionBar().hide();
+        }
+        catch (NullPointerException e){}
 
-        NavigationView navigationView = findViewById(R.id.drawer);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        FloatingActionButton floatingActionButton = findViewById(R.id.floatingactionbutton);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.nav_budgets:
-                        startActivity(new Intent(getApplicationContext(),Home.class));
-                        overridePendingTransition(0,0);
-                        return true;
-                    case R.id.nav_expenses:
-                        startActivity(new Intent(getApplicationContext(), BudgetActivity.class));
-                        overridePendingTransition(0,0);
-                        return true;
-                    case R.id.nav_categories:
-                        startActivity(new Intent(getApplicationContext(), CategoryActivity.class));
-                        overridePendingTransition(0,0);
-                        return true;
-                    case R.id.nav_predictions:
-                        startActivity(new Intent(getApplicationContext(), CategoryActivity.class));
-                        overridePendingTransition(0,0);
-                        return true;
-                    default:
-                        return false;
-                }
+            public void onClick(View view) {
+                Intent intent = new Intent(BudgetActivity.this, CategoryAdd.class);
+                startActivity(intent);
             }
         });
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        ImageView img = findViewById(R.id.back);
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
-        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        Spinner spinner = findViewById(R.id.spinner);
+        String[] month = new String[]{"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_item, month);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
     }
 }

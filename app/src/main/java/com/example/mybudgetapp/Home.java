@@ -71,7 +71,7 @@ public class Home extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.nav_budgets:
-                        startActivity(new Intent(getApplicationContext(),Home.class));
+                        startActivity(new Intent(getApplicationContext(),BudgetActivity.class));
                         overridePendingTransition(0,0);
                         return true;
                     case R.id.nav_expenses:

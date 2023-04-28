@@ -45,45 +45,9 @@ public class CategoryActivity extends AppCompatActivity {
         }
         catch (NullPointerException e){}
 
-        Category category = Category.getCategory_instance();
-
-        //drawerLayout = findViewById(R.id.drawer_layout);
-        //actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
-        //drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        //actionBarDrawerToggle.syncState();
-
-        //NavigationView navigationView = findViewById(R.id.drawer);
-        /*navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.nav_budgets:
-                        startActivity(new Intent(getApplicationContext(),Home.class));
-                        overridePendingTransition(0,0);
-                        return true;
-                    case R.id.nav_expenses:
-                        startActivity(new Intent(getApplicationContext(), BudgetActivity.class));
-                        overridePendingTransition(0,0);
-                        return true;
-                    case R.id.nav_categories:
-                        startActivity(new Intent(getApplicationContext(), CategoryActivity.class));
-                        overridePendingTransition(0,0);
-                        return true;
-                    case R.id.nav_predictions:
-                        startActivity(new Intent(getApplicationContext(), CategoryActivity.class));
-                        overridePendingTransition(0,0);
-                        return true;
-                    default:
-                        return false;
-                }
-            }
-        });*/
-
-
         gridView = findViewById(R.id.grid_layout);
         dataList = new ArrayList<>();
         adapter = new CategoryGridViewAdapter(this, dataList);
-
 
         db.collection("category")
                 .whereEqualTo("user_id", User.getUser_id())
@@ -127,26 +91,5 @@ public class CategoryActivity extends AppCompatActivity {
                 finish();
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-
-        int id = item.getItemId();
-        if (id == R.id.btn_add) {
-            Intent intent = new Intent(this, CategoryAdd.class);
-            startActivity(intent);
-        }
-        return super.onOptionsItemSelected(item);
     }
 }
