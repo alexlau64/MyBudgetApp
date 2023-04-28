@@ -68,7 +68,7 @@
         android:layout_below="@id/frame1"
         android:layout_marginTop="30dp"
         android:layout_marginLeft="30dp"
-        android:text="Your total budgets"
+        android:text="Track your budgets"
         android:textSize="24sp"
         android:fontFamily="@font/montserrat_bold"
         android:textColor="#3A3A3A" />

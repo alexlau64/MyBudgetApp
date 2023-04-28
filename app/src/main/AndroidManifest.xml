@@ -15,6 +15,9 @@
         android:theme="@style/Theme.MyBudgetApp"
         tools:targetApi="31">
         <activity
+            android:name=".BudgetAdd"
+            android:exported="false" />
+        <activity
             android:name=".CategoryEdit"
             android:exported="false" />
         <activity

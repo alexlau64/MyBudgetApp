@@ -27,8 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryActivity extends AppCompatActivity {
-    public DrawerLayout drawerLayout;
-    public ActionBarDrawerToggle actionBarDrawerToggle;
     private GridView gridView;
     private ArrayList<Category> dataList;
     private CategoryGridViewAdapter adapter;
@@ -65,7 +63,7 @@ public class CategoryActivity extends AppCompatActivity {
                             gridView.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
                         } else {
-                            Toast.makeText(CategoryActivity.this, "No data found in Database", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(CategoryActivity.this, "No category created", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
