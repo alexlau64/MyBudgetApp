@@ -69,7 +69,7 @@ public class BudgetDetail extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(BudgetDetail.this, BudgetEdit.class);
                 intent.putExtra("budget_id", budgetId);
-                startActivity(intent);
+                startActivityForResult(intent, 1);
             }
         });
 
@@ -118,4 +118,44 @@ public class BudgetDetail extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            boolean isDataUpdated = data.getBooleanExtra("data_updated", false);
+            if (isDataUpdated) {
+                String budgetId = data.getStringExtra("budget_id");
+
+                db.collection("budget")
+                        .whereEqualTo("budget_id", budgetId)
+                        .get()
+                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                Budget budget = queryDocumentSnapshots.getDocuments().get(0).toObject(Budget.class);
+
+                                TextView amountTextView = findViewById(R.id.txtamount);
+                                String amount = budget.getAmount();
+                                String formattedAmount = "RM " + amount;
+                                amountTextView.setText(formattedAmount);
+
+                                TextView nameTextView = findViewById(R.id.txtname);
+                                nameTextView.setText(budget.getBudget_name());
+
+                                TextView categoryextView = findViewById(R.id.txtcategory);
+                                categoryextView.setText(budget.getCategory());
+
+                                TextView monthTextView = findViewById(R.id.txtmonth);
+                                monthTextView.setText(budget.getMonth());
+
+                                TextView descriptionTextView = findViewById(R.id.txtdescription);
+                                descriptionTextView.setText(budget.getDescription());
+                            }
+                        });
+            }
+        }
+    }
+
 }

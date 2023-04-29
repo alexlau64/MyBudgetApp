@@ -3,6 +3,7 @@ package com.example.mybudgetapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -166,6 +167,12 @@ public class BudgetEdit extends AppCompatActivity {
                                         );
                                     }
                                     Toast.makeText(getApplicationContext(), "Budget update successfully", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent();
+                                    intent.putExtra("data_updated", true);
+                                    intent.putExtra("budget_id", budgetId);
+                                    setResult(RESULT_OK, intent);
+                                    finish();
+
                                     finish();
                                 }
                             })
