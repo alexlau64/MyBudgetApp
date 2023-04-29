@@ -1,13 +1,10 @@
 package com.example.mybudgetapp;
 
-import static android.content.ContentValues.TAG;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -17,16 +14,16 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
-public class CategoryDetail extends AppCompatActivity {
+public class BudgetDetail extends AppCompatActivity {
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_category_detail);
+        setContentView(R.layout.activity_budget_detail);
 
         try
         {
@@ -37,32 +34,41 @@ public class CategoryDetail extends AppCompatActivity {
         Button btnedit = findViewById(R.id.btnedit);
         Button btndelete = findViewById(R.id.btndelete);
 
-        String categoryId = getIntent().getStringExtra("category_id");
+        String budgetId = getIntent().getStringExtra("budget_id");
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("category")
-                .whereEqualTo("category_id", categoryId)
+        db.collection("budget")
+                .whereEqualTo("budget_id", budgetId)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        // Get the category object from the document
-                        Category category = queryDocumentSnapshots.getDocuments().get(0).toObject(Category.class);
+                        Budget budget = queryDocumentSnapshots.getDocuments().get(0).toObject(Budget.class);
 
-                        // Set the category name and description in the UI
+                        TextView amountTextView = findViewById(R.id.txtamount);
+                        String amount = budget.getAmount();
+                        String formattedAmount = "RM " + amount;
+                        amountTextView.setText(formattedAmount);
+
+
                         TextView nameTextView = findViewById(R.id.txtname);
-                        nameTextView.setText(category.getCategory_name());
+                        nameTextView.setText(budget.getBudget_name());
+
+                        TextView categoryextView = findViewById(R.id.txtcategory);
+                        categoryextView.setText(budget.getCategory());
+
+                        TextView monthTextView = findViewById(R.id.txtmonth);
+                        monthTextView.setText(budget.getMonth());
 
                         TextView descriptionTextView = findViewById(R.id.txtdescription);
-                        descriptionTextView.setText(category.getDescription());
+                        descriptionTextView.setText(budget.getDescription());
                     }
                 });
 
         btnedit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CategoryDetail.this, CategoryEdit.class);
-                intent.putExtra("category_id", categoryId);
+                Intent intent = new Intent(BudgetDetail.this, BudgetEdit.class);
+                intent.putExtra("budget_id", budgetId);
                 startActivity(intent);
             }
         });
@@ -70,8 +76,8 @@ public class CategoryDetail extends AppCompatActivity {
         btndelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                db.collection("category")
-                        .whereEqualTo("category_id", categoryId)
+                db.collection("budget")
+                        .whereEqualTo("budget_id", budgetId)
                         .get()
                         .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                             @Override
@@ -82,14 +88,14 @@ public class CategoryDetail extends AppCompatActivity {
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void unused) {
-                                                    Toast.makeText(CategoryDetail.this, "Delete successful", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(BudgetDetail.this, "Delete successful", Toast.LENGTH_SHORT).show();
                                                     finish();
                                                 }
-                                    })
+                                            })
                                             .addOnFailureListener(new OnFailureListener() {
                                                 @Override
                                                 public void onFailure(@NonNull Exception e) {
-                                                    Toast.makeText(CategoryDetail.this, "Error delete category", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(BudgetDetail.this, "Error delete budget", Toast.LENGTH_SHORT).show();
                                                 }
                                             });
                                 }
@@ -98,7 +104,7 @@ public class CategoryDetail extends AppCompatActivity {
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(CategoryDetail.this, "Error delete category", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(BudgetDetail.this, "Error delete budget", Toast.LENGTH_SHORT).show();
                             }
                         });
             }

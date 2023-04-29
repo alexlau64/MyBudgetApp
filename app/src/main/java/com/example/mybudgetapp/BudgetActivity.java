@@ -26,8 +26,8 @@ import java.util.List;
 
 public class BudgetActivity extends AppCompatActivity {
     private GridView gridView;
-    private ArrayList<Category> dataList;
-    private CategoryGridViewAdapter adapter;
+    private ArrayList<Budget> dataList;
+    private BudgetGridViewAdapter adapter;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +43,7 @@ public class BudgetActivity extends AppCompatActivity {
 
         gridView = findViewById(R.id.grid_layout);
         dataList = new ArrayList<>();
-        adapter = new CategoryGridViewAdapter(this, dataList);
+        adapter = new BudgetGridViewAdapter(this, dataList);
 
         db.collection("budget")
                 .whereEqualTo("user_id", User.getUser_id())
@@ -54,10 +54,10 @@ public class BudgetActivity extends AppCompatActivity {
                         if (!queryDocumentSnapshots.isEmpty()) {
                             List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
                             for (DocumentSnapshot d : list) {
-                                Category dataClass = d.toObject(Category.class);
+                                Budget dataClass = d.toObject(Budget.class);
                                 dataList.add(dataClass);
                             }
-                            CategoryGridViewAdapter adapter = new CategoryGridViewAdapter(BudgetActivity.this, dataList);
+                            BudgetGridViewAdapter adapter = new BudgetGridViewAdapter(BudgetActivity.this, dataList);
                             gridView.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
                         } else {

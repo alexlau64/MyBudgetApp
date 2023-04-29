@@ -6,36 +6,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="95dp"
+        android:background="@drawable/rectangle_4">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="95dp"
-            android:background="@drawable/rectangle_4">
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            android:layout_gravity="left"
+            android:src="@drawable/back"/>
 
-            <ImageView
-                android:id="@+id/back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="30dp"
-                android:layout_gravity="left"
-                android:src="@drawable/back"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            android:text="Budgets"
+            android:layout_gravity="center_horizontal"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF"
+            android:fontFamily="@font/montserrat_bold" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="30dp"
-                android:text="Budgets"
-                android:layout_gravity="center_horizontal"
-                android:textSize="16sp"
-                android:textColor="#FFFFFF"
-                android:fontFamily="@font/montserrat_bold" />
-
-        </FrameLayout>
-
-    </RelativeLayout>
+    </FrameLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
