@@ -1,5 +1,6 @@
 package com.example.mybudgetapp;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -16,7 +17,9 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -47,12 +50,17 @@ public class BudgetActivity extends AppCompatActivity {
 
         db.collection("budget")
                 .whereEqualTo("user_id", User.getUser_id())
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Toast.makeText(BudgetActivity.this, "Fail to load data..", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
                         if (!queryDocumentSnapshots.isEmpty()) {
                             List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+                            dataList.clear(); // Clear the existing data before adding the updated data
                             for (DocumentSnapshot d : list) {
                                 Budget dataClass = d.toObject(Budget.class);
                                 dataList.add(dataClass);
@@ -64,12 +72,8 @@ public class BudgetActivity extends AppCompatActivity {
                             Toast.makeText(BudgetActivity.this, "No budget created", Toast.LENGTH_SHORT).show();
                         }
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(BudgetActivity.this, "Fail to load data..", Toast.LENGTH_SHORT).show();
-                    }
                 });
+
 
         FloatingActionButton floatingActionButton = findViewById(R.id.floatingactionbutton);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {

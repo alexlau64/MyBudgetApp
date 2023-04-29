@@ -3,6 +3,8 @@ package com.example.mybudgetapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -86,6 +88,10 @@ public class CategoryEdit extends AppCompatActivity {
                                     );
                                 }
                                 Toast.makeText(getApplicationContext(), "Category update successfully", Toast.LENGTH_SHORT).show();
+                                Intent resultIntent = new Intent();
+                                resultIntent.putExtra("category_id", categoryId);
+                                resultIntent.putExtra("data_updated", true);
+                                setResult(Activity.RESULT_OK, resultIntent);
                                 finish();
                             }
                         })

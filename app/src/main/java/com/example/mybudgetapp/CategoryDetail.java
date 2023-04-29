@@ -3,6 +3,7 @@ package com.example.mybudgetapp;
 import static android.content.ContentValues.TAG;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -18,7 +19,9 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 public class CategoryDetail extends AppCompatActivity {
@@ -42,27 +45,37 @@ public class CategoryDetail extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("category")
                 .whereEqualTo("category_id", categoryId)
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        // Get the category object from the document
-                        Category category = queryDocumentSnapshots.getDocuments().get(0).toObject(Category.class);
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            // Handle the error
+                            return;
+                        }
 
-                        // Set the category name and description in the UI
-                        TextView nameTextView = findViewById(R.id.txtname);
-                        nameTextView.setText(category.getCategory_name());
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            // Get the category object from the document
+                            Category category = queryDocumentSnapshots.getDocuments().get(0).toObject(Category.class);
 
-                        TextView descriptionTextView = findViewById(R.id.txtdescription);
-                        descriptionTextView.setText(category.getDescription());
+                            // Set the category name and description in the UI
+                            TextView nameTextView = findViewById(R.id.txtname);
+                            nameTextView.setText(category.getCategory_name());
+
+                            TextView descriptionTextView = findViewById(R.id.txtdescription);
+                            descriptionTextView.setText(category.getDescription());
+                        } else {
+                            // Handle the case where no documents are returned
+                        }
                     }
                 });
+
 
         btnedit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CategoryDetail.this, CategoryEdit.class);
                 intent.putExtra("category_id", categoryId);
+                startActivityForResult(intent, 1);
                 startActivity(intent);
             }
         });
@@ -112,4 +125,45 @@ public class CategoryDetail extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            boolean dataUpdated = data.getBooleanExtra("data_updated", false);
+
+            if (dataUpdated) {
+                String categoryId = data.getStringExtra("category_id");
+
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                db.collection("category")
+                        .whereEqualTo("category_id", categoryId)
+                        .get()
+                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                if (!queryDocumentSnapshots.isEmpty()) {
+                                    // Get the category object from the document
+                                    Category category = queryDocumentSnapshots.getDocuments().get(0).toObject(Category.class);
+
+                                    // Set the category name and description in the UI
+                                    TextView nameTextView = findViewById(R.id.txtname);
+                                    nameTextView.setText(category.getCategory_name());
+
+                                    TextView descriptionTextView = findViewById(R.id.txtdescription);
+                                    descriptionTextView.setText(category.getDescription());
+                                }
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d(TAG, "Error getting category: " + e);
+                            }
+                        });
+            }
+        }
+    }
+
 }

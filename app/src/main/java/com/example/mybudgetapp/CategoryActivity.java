@@ -1,5 +1,6 @@
 package com.example.mybudgetapp;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -18,7 +19,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -49,12 +52,17 @@ public class CategoryActivity extends AppCompatActivity {
 
         db.collection("category")
                 .whereEqualTo("user_id", User.getUser_id())
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Toast.makeText(CategoryActivity.this, "Fail to load data..", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
                         if (!queryDocumentSnapshots.isEmpty()) {
                             List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+                            dataList.clear(); // Clear the existing data before adding the updated data
                             for (DocumentSnapshot d : list) {
                                 Category dataClass = d.toObject(Category.class);
                                 dataList.add(dataClass);
@@ -66,12 +74,8 @@ public class CategoryActivity extends AppCompatActivity {
                             Toast.makeText(CategoryActivity.this, "No category created", Toast.LENGTH_SHORT).show();
                         }
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(CategoryActivity.this, "Fail to load data..", Toast.LENGTH_SHORT).show();
-                    }
                 });
+
 
         FloatingActionButton floatingActionButton = findViewById(R.id.floatingactionbutton);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
