@@ -32,6 +32,7 @@ public class BudgetActivity extends AppCompatActivity {
     private ArrayList<Budget> dataList;
     private BudgetGridViewAdapter adapter;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private String selectedMonth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +51,7 @@ public class BudgetActivity extends AppCompatActivity {
 
         db.collection("budget")
                 .whereEqualTo("user_id", User.getUser_id())
+                .whereEqualTo("month", selectedMonth)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -60,7 +62,7 @@ public class BudgetActivity extends AppCompatActivity {
 
                         if (!queryDocumentSnapshots.isEmpty()) {
                             List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
-                            dataList.clear(); // Clear the existing data before adding the updated data
+                            dataList.clear();
                             for (DocumentSnapshot d : list) {
                                 Budget dataClass = d.toObject(Budget.class);
                                 dataList.add(dataClass);
@@ -69,11 +71,10 @@ public class BudgetActivity extends AppCompatActivity {
                             gridView.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
                         } else {
-                            Toast.makeText(BudgetActivity.this, "No budget created", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(BudgetActivity.this, "No budget created for " + selectedMonth, Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
-
 
         FloatingActionButton floatingActionButton = findViewById(R.id.floatingactionbutton);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -102,7 +103,38 @@ public class BudgetActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedMonth = parent.getItemAtPosition(position).toString();
-                // Do something with the selected month
+                db.collection("budget")
+                        .whereEqualTo("user_id", User.getUser_id())
+                        .whereEqualTo("month", selectedMonth)
+                        .get()
+                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                if (!queryDocumentSnapshots.isEmpty()) {
+                                    List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+                                    dataList.clear();
+                                    for (DocumentSnapshot d : list) {
+                                        Budget dataClass = d.toObject(Budget.class);
+                                        dataList.add(dataClass);
+                                    }
+                                    BudgetGridViewAdapter adapter = new BudgetGridViewAdapter(BudgetActivity.this, dataList);
+                                    gridView.setAdapter(adapter);
+                                    adapter.notifyDataSetChanged();
+                                } else {
+                                    dataList.clear();
+                                    BudgetGridViewAdapter adapter = new BudgetGridViewAdapter(BudgetActivity.this, dataList);
+                                    gridView.setAdapter(adapter);
+                                    adapter.notifyDataSetChanged();
+                                    Toast.makeText(BudgetActivity.this, "No budget created for " + selectedMonth, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(BudgetActivity.this, "Fail to load data..", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
             }
 
             @Override
@@ -110,7 +142,5 @@ public class BudgetActivity extends AppCompatActivity {
                 // Do nothing
             }
         });
-
-
     }
 }
