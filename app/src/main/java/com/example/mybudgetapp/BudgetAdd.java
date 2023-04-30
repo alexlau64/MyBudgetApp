@@ -105,7 +105,7 @@ public class BudgetAdd extends AppCompatActivity {
             public void onClick(View view) {
                 String name = txtname.getText().toString();
                 String description = txtdescription.getText().toString();
-                String amount = txtamount.getText().toString();
+                String amountString  = String.valueOf(txtamount.getText().toString());
                 final String selectedMonth = spinner.getSelectedItem().toString();
                 final String selectedCategory = spinner2.getSelectedItem().toString();
 
@@ -113,13 +113,14 @@ public class BudgetAdd extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Please enter category name", Toast.LENGTH_SHORT).show();
                 } else if (description.matches("")) {
                     Toast.makeText(getApplicationContext(), "Please enter your description", Toast.LENGTH_SHORT).show();
-                } else if (amount.matches("")) {
+                } else if (amountString .matches("")) {
                     Toast.makeText(getApplicationContext(), "Please enter amount", Toast.LENGTH_SHORT).show();
                 } else if (selectedMonth.equals("Month")) {
                     Toast.makeText(getApplicationContext(), "Please select a month", Toast.LENGTH_SHORT).show();
                 } else if (selectedCategory.equals("Category")) {
                     Toast.makeText(getApplicationContext(), "Please select a category", Toast.LENGTH_SHORT).show();
                 } else {
+                    double amount = Double.parseDouble(amountString);
                     User user = User.getUser_instance();
                     String id = UUID.randomUUID().toString();
                     Map<String, Object> budget = new HashMap<>();

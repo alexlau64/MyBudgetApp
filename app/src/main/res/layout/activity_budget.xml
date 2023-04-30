@@ -50,11 +50,11 @@
             android:textColor="#87F0FF" />
 
         <TextView
+            android:id="@+id/totalbudget"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="180dp"
             android:gravity="center_horizontal"
-            android:text="RM100"
             android:fontFamily="@font/montserrat_bold"
             android:textSize="28sp"
             android:textColor="#FFFFFF" />

@@ -6,7 +6,7 @@ public class Budget {
     private String budget_name;
     private String description;
     private String user_id;
-    private String amount;
+    private double amount;
     private String month;
     private String category;
 
@@ -50,11 +50,11 @@ public class Budget {
         this.user_id = user_id;
     }
 
-    public String getAmount() {
+    public double getAmount() {
         return amount;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 

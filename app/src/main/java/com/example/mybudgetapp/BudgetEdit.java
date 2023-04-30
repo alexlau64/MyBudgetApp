@@ -109,7 +109,7 @@ public class BudgetEdit extends AppCompatActivity {
                             // Set the category name and description in the UI
                             edtname.setText(budget.getBudget_name());
                             edtdescription.setText(budget.getDescription());
-                            edtamount.setText(budget.getAmount());
+                            edtamount.setText(String.valueOf(budget.getAmount()));
 
                             // Set the selected item in the spinner for the month
                             ArrayAdapter<String> monthAdapter = (ArrayAdapter<String>) spinnermonth.getAdapter();
@@ -134,7 +134,7 @@ public class BudgetEdit extends AppCompatActivity {
             public void onClick(View v) {
                 String new_name = edtname.getText().toString();
                 String new_description = edtdescription.getText().toString();
-                String new_amount = edtamount.getText().toString();
+                String new_amount_string = edtamount.getText().toString();
                 String selectedMonth = spinnermonth.getSelectedItem().toString();
                 String selectedCategory = spinnercategory.getSelectedItem().toString();
 
@@ -142,13 +142,14 @@ public class BudgetEdit extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Please enter budget name", Toast.LENGTH_SHORT).show();
                 } else if (new_description.matches("")) {
                     Toast.makeText(getApplicationContext(), "Please enter your description", Toast.LENGTH_SHORT).show();
-                } else if (new_amount.matches("")) {
+                } else if (new_amount_string.matches("")) {
                     Toast.makeText(getApplicationContext(), "Please enter amount", Toast.LENGTH_SHORT).show();
                 } else if (selectedMonth.equals("Month")) {
                     Toast.makeText(getApplicationContext(), "Please select a month", Toast.LENGTH_SHORT).show();
                 } else if (selectedCategory.equals("Category")) {
                     Toast.makeText(getApplicationContext(), "Please select a category", Toast.LENGTH_SHORT).show();
                 } else {
+                    double new_amount = Double.parseDouble(new_amount_string);
                     db.collection("budget")
                             .whereEqualTo("budget_id", budgetId)
                             .get()

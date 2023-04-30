@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -33,17 +34,20 @@ public class BudgetActivity extends AppCompatActivity {
     private BudgetGridViewAdapter adapter;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private String selectedMonth;
+    private double totalBudget = 0.00;
+    private TextView totalAmountTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_budget);
+
+        totalAmountTextView = findViewById(R.id.totalbudget);
 
         try
         {
             this.getSupportActionBar().hide();
         }
         catch (NullPointerException e){}
-
 
         gridView = findViewById(R.id.grid_layout);
         dataList = new ArrayList<>();
@@ -66,11 +70,15 @@ public class BudgetActivity extends AppCompatActivity {
                             for (DocumentSnapshot d : list) {
                                 Budget dataClass = d.toObject(Budget.class);
                                 dataList.add(dataClass);
+                                totalBudget += dataClass.getAmount();
                             }
                             BudgetGridViewAdapter adapter = new BudgetGridViewAdapter(BudgetActivity.this, dataList);
                             gridView.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
+
+                            totalAmountTextView.setText(String.format("RM %.2f", totalBudget));
                         } else {
+                            totalAmountTextView.setText(String.format("RM %.2f", totalBudget));
                             Toast.makeText(BudgetActivity.this, "No budget created for " + selectedMonth, Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -103,6 +111,7 @@ public class BudgetActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedMonth = parent.getItemAtPosition(position).toString();
+                totalBudget = 0.00;
                 db.collection("budget")
                         .whereEqualTo("user_id", User.getUser_id())
                         .whereEqualTo("month", selectedMonth)
@@ -116,16 +125,21 @@ public class BudgetActivity extends AppCompatActivity {
                                     for (DocumentSnapshot d : list) {
                                         Budget dataClass = d.toObject(Budget.class);
                                         dataList.add(dataClass);
+                                        totalBudget += dataClass.getAmount();
                                     }
                                     BudgetGridViewAdapter adapter = new BudgetGridViewAdapter(BudgetActivity.this, dataList);
                                     gridView.setAdapter(adapter);
                                     adapter.notifyDataSetChanged();
+
+                                    totalAmountTextView.setText(String.format("RM %.2f", totalBudget));
                                 } else {
                                     dataList.clear();
                                     BudgetGridViewAdapter adapter = new BudgetGridViewAdapter(BudgetActivity.this, dataList);
                                     gridView.setAdapter(adapter);
                                     adapter.notifyDataSetChanged();
                                     Toast.makeText(BudgetActivity.this, "No budget created for " + selectedMonth, Toast.LENGTH_SHORT).show();
+
+                                    totalAmountTextView.setText(String.format("RM %.2f", totalBudget));
                                 }
                             }
                         }).addOnFailureListener(new OnFailureListener() {

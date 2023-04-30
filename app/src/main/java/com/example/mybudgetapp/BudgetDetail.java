@@ -45,8 +45,8 @@ public class BudgetDetail extends AppCompatActivity {
                         Budget budget = queryDocumentSnapshots.getDocuments().get(0).toObject(Budget.class);
 
                         TextView amountTextView = findViewById(R.id.txtamount);
-                        String amount = budget.getAmount();
-                        String formattedAmount = "RM " + amount;
+                        double amount = budget.getAmount();
+                        String formattedAmount = "RM " + String.format("%.2f", amount);
                         amountTextView.setText(formattedAmount);
 
 
@@ -137,8 +137,8 @@ public class BudgetDetail extends AppCompatActivity {
                                 Budget budget = queryDocumentSnapshots.getDocuments().get(0).toObject(Budget.class);
 
                                 TextView amountTextView = findViewById(R.id.txtamount);
-                                String amount = budget.getAmount();
-                                String formattedAmount = "RM " + amount;
+                                double amount = budget.getAmount();
+                                String formattedAmount = "RM " + String.format("%.2f", amount);
                                 amountTextView.setText(formattedAmount);
 
                                 TextView nameTextView = findViewById(R.id.txtname);
