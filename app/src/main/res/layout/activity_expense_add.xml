@@ -27,7 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="30dp"
-                android:text="Add Budget"
+                android:text="Add Expense"
                 android:layout_gravity="center_horizontal"
                 android:textSize="16sp"
                 android:textColor="#FFFFFF"
@@ -50,7 +50,7 @@
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
             android:fontFamily="@font/montserrat"
-            android:text="Budget Name"
+            android:text="Expense Name"
             android:textSize="16sp"
             android:textColor="#000000" />
 
@@ -63,7 +63,7 @@
             android:layout_marginEnd="30dp"
             android:layout_below="@+id/txt_name"
             android:inputType="text"
-            android:hint="Enter budget name"
+            android:hint="Enter expense name"
             android:textColor="#2743FD"
             android:textSize="16sp"
             android:fontFamily="@font/montserrat" />
@@ -91,7 +91,7 @@
             android:layout_below="@+id/txt_description"
             android:inputType="text"
             android:textSize="16sp"
-            android:hint="Enter budget description"
+            android:hint="Enter expense description"
             android:fontFamily="@font/montserrat"
             android:textColor="#2743FD"/>
 
@@ -121,24 +121,43 @@
             android:fontFamily="@font/montserrat"
             android:textColor="#2743FD"/>
 
-        <Spinner
-            android:id="@+id/spinner_month"
+        <TextView
+            android:id="@+id/tv_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/edt_amount"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
             android:layout_marginTop="10dp"
-            android:layout_gravity="left"
-            android:gravity="left"
-            android:spinnerMode="dropdown"
-            android:background="@drawable/frame2"/>
+            android:paddingLeft="10dp"
+            android:textSize="16sp"
+            android:text="Date"
+            android:gravity="center_vertical"
+            android:textColor="#000000"
+            android:fontFamily="@font/montserrat"
+            android:background="@drawable/frame2" />
 
-        <Spinner
-            android:id="@+id/spinner_category"
+        <TextView
+            android:id="@+id/tv_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/spinner_month"
+            android:layout_below="@+id/tv_date"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="10dp"
+            android:textSize="16sp"
+            android:text="Time"
+            android:gravity="center_vertical"
+            android:textColor="#000000"
+            android:fontFamily="@font/montserrat"
+            android:background="@drawable/frame2" />
+
+        <Spinner
+            android:id="@+id/spinner_budget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_time"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
             android:layout_marginTop="10dp"
@@ -151,7 +170,7 @@
             android:id="@+id/btncomplete"
             android:layout_width="315dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/spinner_category"
+            android:layout_below="@id/spinner_budget"
             android:layout_marginTop="60dp"
             android:layout_centerHorizontal="true"
             android:background="@drawable/rectangle_1"

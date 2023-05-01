@@ -125,8 +125,6 @@
             android:textColor="#0D0E0F"
             android:fontFamily="@font/montserrat" />
 
-
-
     </RelativeLayout>
 
     <View

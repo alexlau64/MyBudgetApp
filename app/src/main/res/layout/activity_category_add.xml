@@ -32,7 +32,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="30dp"
-                    android:text="Categories"
+                    android:text="Add Category"
                     android:layout_gravity="center_horizontal"
                     android:textSize="16sp"
                     android:textColor="#FFFFFF"
@@ -95,10 +95,10 @@
                 android:layout_marginEnd="30dp"
                 android:layout_marginTop="10dp"
                 android:layout_below="@+id/txt_description"
-                android:inputType="textMultiLine"
-                android:minLines="3"
+                android:inputType="text"
                 android:textSize="16sp"
                 android:hint="Enter category description"
+                android:fontFamily="@font/montserrat"
                 android:textColor="#2743FD"/>
 
             <Button

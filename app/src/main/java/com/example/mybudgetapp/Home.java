@@ -75,7 +75,7 @@ public class Home extends AppCompatActivity {
                         overridePendingTransition(0,0);
                         return true;
                     case R.id.nav_expenses:
-                        startActivity(new Intent(getApplicationContext(), BudgetActivity.class));
+                        startActivity(new Intent(getApplicationContext(), ExpenseActivity.class));
                         overridePendingTransition(0,0);
                         return true;
                     case R.id.nav_categories:
