@@ -5,32 +5,50 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.w3c.dom.Text;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class ExpenseAdd extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     User user = User.getUser_instance();
+    private Uri filePath;
+    private final int PICK_IMAGE_REQUEST = 22;
+    private ImageView img;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +59,18 @@ public class ExpenseAdd extends AppCompatActivity {
             this.getSupportActionBar().hide();
         }
         catch (NullPointerException e){}
+
+        img = findViewById(R.id.imageView);
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Image from here..."), PICK_IMAGE_REQUEST);
+            }
+        });
 
         ImageView img = findViewById(R.id.back);
         img.setOnClickListener(new View.OnClickListener() {
@@ -139,5 +169,100 @@ public class ExpenseAdd extends AppCompatActivity {
             }
         });
 
+        EditText edtname = findViewById(R.id.edt_name);
+        EditText edtdescription = findViewById(R.id.edt_description);
+        EditText edtamount = findViewById(R.id.edt_amount);
+        TextView tvdate = findViewById(R.id.tv_date);
+        TextView tvtime = findViewById(R.id.tv_time);
+
+        Button btncomplete = findViewById(R.id.btncomplete);
+        btncomplete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String name = edtname.getText().toString();
+                String description = edtdescription.getText().toString();
+                String amount = edtamount.getText().toString();
+                String date = tvdate.getText().toString();
+                String time = tvtime.getText().toString();
+                String selectedBudget = spinner.getSelectedItem().toString();
+
+                if (name.matches("")) {
+                    Toast.makeText(getApplicationContext(), "Please enter budget name", Toast.LENGTH_SHORT).show();
+                } else if (description.matches("")) {
+                    Toast.makeText(getApplicationContext(), "Please enter description", Toast.LENGTH_SHORT).show();
+                } else if (amount.matches("")) {
+                    Toast.makeText(getApplicationContext(), "Please enter amount", Toast.LENGTH_SHORT).show();
+                } else if (date.matches("")) {
+                    Toast.makeText(getApplicationContext(), "Please enter date", Toast.LENGTH_SHORT).show();
+                } else if (time.matches("")) {
+                    Toast.makeText(getApplicationContext(), "Please enter time", Toast.LENGTH_SHORT).show();
+                } else if (selectedBudget.equals("Budget")) {
+                    Toast.makeText(getApplicationContext(), "Please select a budget", Toast.LENGTH_SHORT).show();
+                } else {
+                    if (filePath != null) {
+                        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+                        StorageReference ref = storageRef.child("expense/" + user.getUser_id() + "/" + UUID.randomUUID().toString());
+                        ref.putFile(filePath)
+                                .addOnSuccessListener(
+                                        new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                            @Override
+                                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                                // Get the download URL of the uploaded image
+                                                ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                    @Override
+                                                    public void onSuccess(Uri uri) {
+                                                        String imageUrl = uri.toString();
+                                                        Map<String, Object> expense = new HashMap<>();
+                                                        expense.put("name", name);
+                                                        expense.put("description", description);
+                                                        expense.put("amount", amount);
+                                                        expense.put("date", date);
+                                                        expense.put("time", time);
+                                                        expense.put("image_url", imageUrl);
+                                                        db.collection("expense")
+                                                                .add(expense)
+                                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                                    @Override
+                                                                    public void onSuccess(DocumentReference documentReference) {
+                                                                        Toast.makeText(getApplicationContext(), "Budget added successfully", Toast.LENGTH_SHORT).show();
+                                                                        finish();
+                                                                    }
+                                                                })
+                                                                .addOnFailureListener(new OnFailureListener() {
+                                                                    @Override
+                                                                    public void onFailure(@NonNull Exception e) {
+                                                                        Toast.makeText(getApplicationContext(), "Failed to add budget: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                    }
+                                                                });
+                                                    }
+                                                });
+                                                Toast.makeText(ExpenseAdd.this, "Image Uploaded", Toast.LENGTH_SHORT).show();
+                                            }
+                                        })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(ExpenseAdd.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                    }
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            filePath = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                img.setImageBitmap(bitmap);
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

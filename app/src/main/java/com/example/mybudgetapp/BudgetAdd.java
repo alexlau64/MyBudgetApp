@@ -112,7 +112,7 @@ public class BudgetAdd extends AppCompatActivity {
                 if (name.matches("")) {
                     Toast.makeText(getApplicationContext(), "Please enter category name", Toast.LENGTH_SHORT).show();
                 } else if (description.matches("")) {
-                    Toast.makeText(getApplicationContext(), "Please enter your description", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Please enter description", Toast.LENGTH_SHORT).show();
                 } else if (amountString .matches("")) {
                     Toast.makeText(getApplicationContext(), "Please enter amount", Toast.LENGTH_SHORT).show();
                 } else if (selectedMonth.equals("Month")) {
