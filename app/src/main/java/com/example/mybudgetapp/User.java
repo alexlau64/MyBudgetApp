@@ -6,6 +6,7 @@ public class User {
     private static String username;
     private static String full_name;
     private static String dob;
+    private static String image_url;
     private static boolean is_login = false;
 
     public static User getUser_instance() {
@@ -64,5 +65,13 @@ public class User {
 
     public static void setIs_login(boolean is_login) {
         User.is_login = is_login;
+    }
+
+    public static String getImage_url() {
+        return image_url;
+    }
+
+    public static void setImage_url(String image_url) {
+        User.image_url = image_url;
     }
 }

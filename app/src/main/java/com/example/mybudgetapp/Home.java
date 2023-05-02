@@ -14,17 +14,23 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class Home extends AppCompatActivity {
     public DrawerLayout drawerLayout;
-    public ActionBarDrawerToggle actionBarDrawerToggle;
     public ImageView hamburgerMenu;
-
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    User user = User.getUser_instance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +42,21 @@ public class Home extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         catch (NullPointerException e){}
+
+        ImageView imageView = findViewById(R.id.profileimage);
+        DocumentReference userRef = db.collection("users").document(user.getUser_id());
+        userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                String imageUrl = documentSnapshot.getString("image_url");
+                Glide.with(Home.this).load(imageUrl).into(imageView);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                // Handle any errors
+            }
+        });
 
         hamburgerMenu = findViewById(R.id.hamburgermenu);
         drawerLayout = findViewById(R.id.drawer_layout);

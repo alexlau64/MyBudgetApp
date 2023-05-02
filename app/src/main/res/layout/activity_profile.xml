@@ -36,8 +36,7 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_below="@+id/profile"
-                android:layout_marginStart="30dp"
-                app:srcCompat="@drawable/profileimage" />
+                android:layout_marginStart="30dp" />
 
             <TextView
                 android:id="@+id/txtusername"
