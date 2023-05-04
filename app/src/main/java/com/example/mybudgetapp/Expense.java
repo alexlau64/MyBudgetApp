@@ -8,8 +8,9 @@ public class Expense {
     private double amount;
     private String date;
     private String time;
-    private String budget;
+    private String budget_name;
     private String user_id;
+    private String image_url;
 
     public static Expense getExpense_instance() {
         return expense_instance;
@@ -67,12 +68,12 @@ public class Expense {
         this.time = time;
     }
 
-    public String getBudget() {
-        return budget;
+    public String getBudget_name() {
+        return budget_name;
     }
 
-    public void setBudget(String budget) {
-        this.budget = budget;
+    public void setBudget_name(String budget) {
+        this.budget_name = budget;
     }
 
     public String getUser_id() {
@@ -81,5 +82,13 @@ public class Expense {
 
     public void setUser_id(String user_id) {
         this.user_id = user_id;
+    }
+
+    public String getImage_url() {
+        return image_url;
+    }
+
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
     }
 }

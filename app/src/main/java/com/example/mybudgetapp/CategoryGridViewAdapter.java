@@ -51,7 +51,7 @@ public class CategoryGridViewAdapter extends ArrayAdapter<Category> {
             public void onClick(View v) {
                 // on the item click on our list view.
                 // we are displaying a toast message.
-                //Toast.makeText(getContext(), "Item clicked is : " + dataModal.getCategory_name(), Toast.LENGTH_SHORT).show();
+
 
                 // Get the context from the view
                 Context context = v.getContext();

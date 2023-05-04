@@ -73,6 +73,17 @@
         android:fontFamily="@font/montserrat_bold"
         android:textColor="#3A3A3A" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/text1"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="30dp"
+        android:clipToPadding="false"
+        android:padding="15dp" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingactionbutton"
         android:layout_width="wrap_content"

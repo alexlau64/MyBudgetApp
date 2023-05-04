@@ -181,7 +181,8 @@ public class ExpenseAdd extends AppCompatActivity {
             public void onClick(View view) {
                 String name = edtname.getText().toString();
                 String description = edtdescription.getText().toString();
-                String amount = edtamount.getText().toString();
+                double amount = Double.parseDouble(edtamount.getText().toString());
+                String amountString  = String.valueOf(edtamount.getText().toString());
                 String date = tvdate.getText().toString();
                 String time = tvtime.getText().toString();
                 String selectedBudget = spinner.getSelectedItem().toString();
@@ -190,7 +191,7 @@ public class ExpenseAdd extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Please enter budget name", Toast.LENGTH_SHORT).show();
                 } else if (description.matches("")) {
                     Toast.makeText(getApplicationContext(), "Please enter description", Toast.LENGTH_SHORT).show();
-                } else if (amount.matches("")) {
+                } else if (amountString.matches("")) {
                     Toast.makeText(getApplicationContext(), "Please enter amount", Toast.LENGTH_SHORT).show();
                 } else if (date.matches("")) {
                     Toast.makeText(getApplicationContext(), "Please enter date", Toast.LENGTH_SHORT).show();
@@ -211,14 +212,19 @@ public class ExpenseAdd extends AppCompatActivity {
                                                 ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                                     @Override
                                                     public void onSuccess(Uri uri) {
+                                                        double amount = Double.parseDouble(amountString);
                                                         String imageUrl = uri.toString();
+                                                        String id = UUID.randomUUID().toString();
                                                         Map<String, Object> expense = new HashMap<>();
-                                                        expense.put("name", name);
+                                                        expense.put("expense_id", id);
+                                                        expense.put("expense_name", name);
                                                         expense.put("description", description);
                                                         expense.put("amount", amount);
                                                         expense.put("date", date);
                                                         expense.put("time", time);
+                                                        expense.put("budget_name", selectedBudget);
                                                         expense.put("image_url", imageUrl);
+                                                        expense.put("user_id", user.getUser_id());
                                                         db.collection("expense")
                                                                 .add(expense)
                                                                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
