@@ -64,8 +64,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ExpenseViewHolder>
 
         public void bind(DocumentSnapshot expense) {
             nameTextView.setText(expense.getString("expense_name"));
-            amountTextView.setText("RM" + String.valueOf(expense.getDouble("amount")));
-            dateTextView.setText(expense.getString("date") + expense.getString("time"));
+            double amount = expense.getDouble("amount");
+            amountTextView.setText(String.format("RM%.2f", amount));
+            dateTextView.setText(expense.getString("date") + " " + expense.getString("time"));
             expenseId = expense.getString("expense_id");
         }
     }

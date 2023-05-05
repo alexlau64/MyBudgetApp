@@ -12,7 +12,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -26,7 +32,11 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class ExpenseActivity extends AppCompatActivity {
@@ -34,6 +44,7 @@ public class ExpenseActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference expensesRef = db.collection("expense");
     User user = User.getUser_instance();
+    private double totalExpense = 0.00;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,5 +91,63 @@ public class ExpenseActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        Spinner spinner = findViewById(R.id.spinner);
+        String[] month = new String[]{"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_item_month1, month);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedMonth = parent.getItemAtPosition(position).toString();
+
+                db.collection("expense")
+                        .whereEqualTo("user_id", User.getUser_id())
+                        .get()
+                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                List<DocumentSnapshot> expenseList = new ArrayList<>();
+                                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                    Expense expense = documentSnapshot.toObject(Expense.class);
+                                    String dateString = expense.getDate();
+                                    SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                                    Date date = null;
+                                    try {
+                                        date = format.parse(dateString);
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                    Calendar calendar = Calendar.getInstance();
+                                    calendar.setTime(date);
+                                    int month = calendar.get(Calendar.MONTH);
+                                    if (selectedMonth.equals(getMonthName(month))) {
+                                        DocumentSnapshot expenseDocument = documentSnapshot;
+                                        expenseList.add(expenseDocument);
+                                        totalExpense += expense.getAmount();
+                                    }
+                                    TextView totalAmountTextView = findViewById(R.id.totalexpense);
+                                    totalAmountTextView.setText(String.format("RM %.2f", totalExpense));
+                                }
+                                MyAdapter adapter = new MyAdapter(expenseList, ExpenseActivity.this);
+                                recyclerView.setAdapter(adapter);
+                            }
+                        });
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Do nothing
+            }
+        });
+
+
+
+    }
+    private String getMonthName(int month) {
+        String[] monthNames = new String[]{"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+        return monthNames[month];
     }
 }

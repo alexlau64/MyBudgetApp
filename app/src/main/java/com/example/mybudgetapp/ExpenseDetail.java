@@ -4,7 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.media.Image;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,7 +56,7 @@ public class ExpenseDetail extends AppCompatActivity {
                             descriptionTextView.setText(expense.getDescription());
 
                             TextView datetimeTextView = findViewById(R.id.txtdatetime);
-                            datetimeTextView.setText(expense.getDate() + expense.getTime());
+                            datetimeTextView.setText(expense.getDate() + " " + expense.getTime());
 
                             ImageView imageView = findViewById(R.id.imageView);
                             String imageUrl = expense.getImage_url();
@@ -64,5 +67,13 @@ public class ExpenseDetail extends AppCompatActivity {
                         }
                     }
                 });
+
+        ImageView img = findViewById(R.id.back);
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 }
