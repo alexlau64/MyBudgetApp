@@ -52,38 +52,7 @@ public class BudgetActivity extends AppCompatActivity {
         gridView = findViewById(R.id.grid_layout);
         dataList = new ArrayList<>();
         adapter = new BudgetGridViewAdapter(this, dataList);
-
-        db.collection("budget")
-                .whereEqualTo("user_id", User.getUser_id())
-                .whereEqualTo("month", selectedMonth)
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Toast.makeText(BudgetActivity.this, "Fail to load data..", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-
-                        if (!queryDocumentSnapshots.isEmpty()) {
-                            List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
-                            dataList.clear();
-                            for (DocumentSnapshot d : list) {
-                                Budget dataClass = d.toObject(Budget.class);
-                                dataList.add(dataClass);
-                                totalBudget += dataClass.getAmount();
-                            }
-                            BudgetGridViewAdapter adapter = new BudgetGridViewAdapter(BudgetActivity.this, dataList);
-                            gridView.setAdapter(adapter);
-                            adapter.notifyDataSetChanged();
-
-                            totalAmountTextView.setText(String.format("RM %.2f", totalBudget));
-                        } else {
-                            totalAmountTextView.setText(String.format("RM %.2f", totalBudget));
-                            Toast.makeText(BudgetActivity.this, "No budget created for " + selectedMonth, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-
+        
         FloatingActionButton floatingActionButton = findViewById(R.id.floatingactionbutton);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
