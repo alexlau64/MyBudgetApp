@@ -132,6 +132,7 @@ public class ExpenseActivity extends AppCompatActivity {
                                     totalAmountTextView.setText(String.format("RM %.2f", totalExpense));
                                 }
                                 MyAdapter adapter = new MyAdapter(expenseList, ExpenseActivity.this);
+                                recyclerView = findViewById(R.id.recyclerView);
                                 recyclerView.setAdapter(adapter);
                             }
                         });

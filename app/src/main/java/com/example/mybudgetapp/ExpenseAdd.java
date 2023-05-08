@@ -53,6 +53,8 @@ public class ExpenseAdd extends AppCompatActivity {
     private Uri filePath;
     private final int PICK_IMAGE_REQUEST = 22;
     private ImageView img;
+    String category;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -165,8 +167,29 @@ public class ExpenseAdd extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedBudget = parent.getItemAtPosition(position).toString();
+                // Retrieve the category for the selected budget
+                db.collection("budget")
+                        .whereEqualTo("budget_name", selectedBudget)
+                        .whereEqualTo("user_id", user.getUser_id())
+                        .get()
+                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot querySnapshot) {
+                                if (!querySnapshot.isEmpty()) {
+                                    DocumentSnapshot document = querySnapshot.getDocuments().get(0);
+                                    category = document.getString("category");
+                                    // Use the category variable as needed
+                                    // For example, you can store it in a class variable or call a method with the category as an argument
+                                }
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // Handle any errors
+                            }
+                        });
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 // Do nothing
@@ -227,6 +250,7 @@ public class ExpenseAdd extends AppCompatActivity {
                                                         expense.put("date", date);
                                                         expense.put("time", time);
                                                         expense.put("budget_name", selectedBudget);
+                                                        expense.put("category", category);
                                                         expense.put("image_url", imageUrl);
                                                         expense.put("user_id", user.getUser_id());
                                                         db.collection("expense")
