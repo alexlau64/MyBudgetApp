@@ -15,6 +15,12 @@
         android:theme="@style/Theme.MyBudgetApp"
         tools:targetApi="31">
         <activity
+            android:name=".PredictionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Report"
+            android:exported="false" />
+        <activity
             android:name=".ExpenseDetail"
             android:exported="false" />
         <activity

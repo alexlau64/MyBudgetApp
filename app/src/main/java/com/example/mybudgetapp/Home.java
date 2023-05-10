@@ -64,7 +64,6 @@ public class Home extends AppCompatActivity {
     public ImageView hamburgerMenu;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     User user = User.getUser_instance();
-    private PieChart chart;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,7 +137,7 @@ public class Home extends AppCompatActivity {
                         overridePendingTransition(0,0);
                         return true;
                     case R.id.nav_predictions:
-                        startActivity(new Intent(getApplicationContext(), BudgetActivity.class));
+                        startActivity(new Intent(getApplicationContext(), PredictionActivity.class));
                         overridePendingTransition(0,0);
                         return true;
                     default:
@@ -161,7 +160,7 @@ public class Home extends AppCompatActivity {
                         overridePendingTransition(0,0);
                         return true;
                     case R.id.navigation_analytics:
-                        startActivity(new Intent(getApplicationContext(),Home.class));
+                        startActivity(new Intent(getApplicationContext(),Report.class));
                         overridePendingTransition(0,0);
                         return true;
                     case R.id.navigation_profile:
