@@ -59,7 +59,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <com.anychart.anychart.AnyChartView
+                <com.github.mikephil.charting.charts.PieChart
                     android:id="@+id/chart"
                     android:layout_width="match_parent"
                     android:layout_height="300dp" />
