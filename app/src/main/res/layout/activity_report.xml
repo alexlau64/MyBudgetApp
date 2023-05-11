@@ -38,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="80dp"
-                android:layout_marginStart="50dp"
+                android:layout_gravity="center_horizontal"
                 android:gravity="center"
                 android:spinnerMode="dropdown"
                 android:background="@drawable/dropdown"/>
@@ -59,7 +59,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <com.github.mikephil.charting.charts.LineChart
+                <com.anychart.anychart.AnyChartView
                     android:id="@+id/chart"
                     android:layout_width="match_parent"
                     android:layout_height="300dp" />
