@@ -93,7 +93,11 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 String imageUrl = documentSnapshot.getString("image_url");
-                Glide.with(ProfileActivity.this).load(imageUrl).into(imageView);
+                if (imageUrl != null && !imageUrl.isEmpty()) {
+                    Glide.with(ProfileActivity.this).load(imageUrl).into(imageView);
+                } else {
+                    Glide.with(ProfileActivity.this).load(R.drawable.user).into(imageView);
+                }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

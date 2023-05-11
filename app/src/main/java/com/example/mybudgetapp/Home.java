@@ -82,7 +82,11 @@ public class Home extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 String imageUrl = documentSnapshot.getString("image_url");
-                Glide.with(Home.this).load(imageUrl).into(imageView);
+                if (imageUrl != null && !imageUrl.isEmpty()) {
+                    Glide.with(Home.this).load(imageUrl).into(imageView);
+                } else {
+                    Glide.with(Home.this).load(R.drawable.user).into(imageView);
+                }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
