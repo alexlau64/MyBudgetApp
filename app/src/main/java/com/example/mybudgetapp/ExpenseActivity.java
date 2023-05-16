@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -110,32 +111,29 @@ public class ExpenseActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                 List<DocumentSnapshot> expenseList = new ArrayList<>();
+                                double totalExpense = 0.0;
                                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                                     Expense expense = documentSnapshot.toObject(Expense.class);
-                                    String dateString = expense.getDate();
-                                    SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-                                    Date date = null;
-                                    try {
-                                        date = format.parse(dateString);
-                                    } catch (ParseException e) {
-                                        e.printStackTrace();
-                                    }
+                                    Timestamp timestamp = expense.getDate();
                                     Calendar calendar = Calendar.getInstance();
-                                    calendar.setTime(date);
+                                    calendar.setTime(timestamp.toDate()); // Convert Timestamp to Date
                                     int month = calendar.get(Calendar.MONTH);
                                     if (selectedMonth.equals(getMonthName(month))) {
                                         DocumentSnapshot expenseDocument = documentSnapshot;
                                         expenseList.add(expenseDocument);
                                         totalExpense += expense.getAmount();
                                     }
-                                    TextView totalAmountTextView = findViewById(R.id.totalexpense);
-                                    totalAmountTextView.setText(String.format("RM %.2f", totalExpense));
                                 }
+
+                                TextView totalAmountTextView = findViewById(R.id.totalexpense);
+                                totalAmountTextView.setText(String.format("RM %.2f", totalExpense));
+
                                 MyAdapter adapter = new MyAdapter(expenseList, ExpenseActivity.this);
                                 recyclerView = findViewById(R.id.recyclerView);
                                 recyclerView.setAdapter(adapter);
                             }
                         });
+
             }
 
             @Override

@@ -11,6 +11,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -76,14 +77,8 @@ public class PredictionActivity extends AppCompatActivity {
                                 double totalExpense = 0.0;
                                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                                     Expense expense = documentSnapshot.toObject(Expense.class);
-                                    String dateString = expense.getDate();
-                                    SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-                                    Date date = null;
-                                    try {
-                                        date = format.parse(dateString);
-                                    } catch (ParseException e) {
-                                        e.printStackTrace();
-                                    }
+                                    Timestamp timestamp = expense.getDate();
+                                    Date date = timestamp.toDate(); // Convert Timestamp to Date
                                     Calendar calendar = Calendar.getInstance();
                                     calendar.setTime(date);
                                     int month = calendar.get(Calendar.MONTH);

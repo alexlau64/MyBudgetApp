@@ -10,9 +10,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ExpenseViewHolder> {
     private List<DocumentSnapshot> expenseList;
@@ -66,7 +71,26 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ExpenseViewHolder>
             nameTextView.setText(expense.getString("expense_name"));
             double amount = expense.getDouble("amount");
             amountTextView.setText(String.format("RM%.2f", amount));
-            dateTextView.setText(expense.getString("date") + " " + expense.getString("time"));
+
+            // Convert the Timestamp to a Date object
+            Timestamp timestamp = expense.getTimestamp("date");
+            Date date = timestamp.toDate();
+
+            // Set the desired time zone (UTC+8)
+            TimeZone timeZone = TimeZone.getTimeZone("GMT+8");
+
+            // Create a Calendar object and set the time zone
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeZone(timeZone);
+            calendar.setTime(date);
+
+            // Format the Date object as a string
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy HH:mm");
+            dateFormat.setTimeZone(timeZone);
+            String dateString = dateFormat.format(calendar.getTime());
+
+            // Set the formatted date in the text view
+            dateTextView.setText(dateString);
             expenseId = expense.getString("expense_id");
         }
     }

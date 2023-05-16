@@ -1,12 +1,14 @@
 package com.example.mybudgetapp;
 
+import com.google.firebase.Timestamp;
+
 public class Expense {
     private static Expense expense_instance;
     private String expense_id;
     private String expense_name;
     private String description;
     private double amount;
-    private String date;
+    private Timestamp date;
     private String time;
     private String budget_name;
     private String user_id;
@@ -52,11 +54,11 @@ public class Expense {
         this.amount = amount;
     }
 
-    public String getDate() {
+    public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 

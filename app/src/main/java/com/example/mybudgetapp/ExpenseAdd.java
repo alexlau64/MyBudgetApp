@@ -36,6 +36,7 @@ import com.google.firebase.storage.UploadTask;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -45,6 +46,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.UUID;
 
 public class ExpenseAdd extends AppCompatActivity {
@@ -227,6 +229,18 @@ public class ExpenseAdd extends AppCompatActivity {
                 } else if (selectedBudget.equals("Budget")) {
                     Toast.makeText(getApplicationContext(), "Please select a budget", Toast.LENGTH_SHORT).show();
                 } else {
+                    // Parse the date and time to create a Date object
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
+                    dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+8")); // Set the time zone to UTC+8
+                    Date parsedDate = null;
+                    try {
+                        parsedDate = dateFormat.parse(date + " " + time);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    // Convert Date to Timestamp
+                    Timestamp timestamp = new Timestamp(parsedDate.getTime());
+
                     if (filePath != null) {
                         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
                         StorageReference ref = storageRef.child("expense/" + user.getUser_id() + "/" + UUID.randomUUID().toString());
@@ -247,8 +261,7 @@ public class ExpenseAdd extends AppCompatActivity {
                                                         expense.put("expense_name", name);
                                                         expense.put("description", description);
                                                         expense.put("amount", amount);
-                                                        expense.put("date", date);
-                                                        expense.put("time", time);
+                                                        expense.put("date", timestamp);
                                                         expense.put("budget_name", selectedBudget);
                                                         expense.put("category", category);
                                                         expense.put("image_url", imageUrl);

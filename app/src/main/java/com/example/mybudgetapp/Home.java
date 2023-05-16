@@ -40,6 +40,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -53,6 +54,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -238,28 +240,21 @@ public class Home extends AppCompatActivity {
                             List<PieEntry> entries = new ArrayList<>();
                             Map<String, Double> categoryTotals = new HashMap<>();
                             for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                                String dateString = document.getString("date");
-                                String category = document.getString("category");
-                                double amount = document.getDouble("amount");
-
-                                // Convert the "date" field value to month format
-                                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-                                Date date;
-                                try {
-                                    date = format.parse(dateString);
-                                    String month = new SimpleDateFormat("MMMM", Locale.ENGLISH).format(date);
-                                    // Filter expenses based on selected month
-                                    if (month.equalsIgnoreCase(selectedMonth)) {
-                                        // Calculate total amount per category
-                                        if (categoryTotals.containsKey(category)) {
-                                            double currentTotal = categoryTotals.get(category);
-                                            categoryTotals.put(category, currentTotal + amount);
-                                        } else {
-                                            categoryTotals.put(category, amount);
-                                        }
+                                Timestamp timestamp = document.getTimestamp("date");
+                                Date date = timestamp.toDate();
+                                Calendar calendar = Calendar.getInstance();
+                                calendar.setTime(date);
+                                int month = calendar.get(Calendar.MONTH);
+                                if (selectedMonth.equalsIgnoreCase(getMonthName(month))) {
+                                    String category = document.getString("category");
+                                    double amount = document.getDouble("amount");
+                                    // Calculate total amount per category
+                                    if (categoryTotals.containsKey(category)) {
+                                        double currentTotal = categoryTotals.get(category);
+                                        categoryTotals.put(category, currentTotal + amount);
+                                    } else {
+                                        categoryTotals.put(category, amount);
                                     }
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
                                 }
                             }
                             // Create pie entries with category and total amount
@@ -284,11 +279,13 @@ public class Home extends AppCompatActivity {
                             // Handle any errors that occurred while retrieving expense data
                         });
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 // Do nothing
             }
         });
+
     }
 
     @Override
@@ -303,5 +300,16 @@ public class Home extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private String getMonthName(int month) {
+        String[] monthNames = new String[] {
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+        };
+        if (month >= 0 && month < monthNames.length) {
+            return monthNames[month];
+        }
+        return "";
     }
 }
