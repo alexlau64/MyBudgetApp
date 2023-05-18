@@ -3,6 +3,8 @@ package com.example.mybudgetapp;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -284,6 +286,22 @@ public class Home extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
                 // Do nothing
             }
+        });
+
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        // Create a reference to the "budgets" collection (replace with your actual collection name)
+        CollectionReference budgetsCollection = db.collection("budget");
+        // Fetch the budget data from Firestore
+        budgetsCollection.get().addOnSuccessListener(queryDocumentSnapshots -> {
+            List<DocumentSnapshot> budgetCards = queryDocumentSnapshots.getDocuments();
+            // Create a new instance of the adapter with the fetched budget data
+            BudgetCardAdapter budgetCardAdapter = new BudgetCardAdapter(budgetCards, Home.this);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            // Set the adapter on the RecyclerView
+            recyclerView.setAdapter(budgetCardAdapter);
+        }).addOnFailureListener(e -> {
+            // Handle error fetching budget data from Firestore
+            Log.e("YourActivity", "Failed to fetch budget data", e);
         });
 
     }

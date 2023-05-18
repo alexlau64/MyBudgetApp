@@ -86,6 +86,29 @@
 
         </androidx.cardview.widget.CardView>
 
+        <TextView
+            android:id="@+id/text4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cardViewGraph"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:text="My Budgets"
+            android:textSize="24sp"
+            android:textColor="#3A3A3A"
+            android:fontFamily="@font/montserrat_bold"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text4"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="20dp"
+            android:clipToPadding="false"
+            android:padding="15dp" />
+
     </RelativeLayout>
 
     <com.google.android.material.navigation.NavigationView
