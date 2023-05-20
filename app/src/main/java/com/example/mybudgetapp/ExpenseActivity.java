@@ -37,6 +37,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -124,7 +125,12 @@ public class ExpenseActivity extends AppCompatActivity {
                                         totalExpense += expense.getAmount();
                                     }
                                 }
-
+                                // Sort expenseList by date in descending order
+                                Collections.sort(expenseList, (doc1, doc2) -> {
+                                    Timestamp timestamp1 = doc1.toObject(Expense.class).getDate();
+                                    Timestamp timestamp2 = doc2.toObject(Expense.class).getDate();
+                                    return timestamp2.compareTo(timestamp1);
+                                });
                                 TextView totalAmountTextView = findViewById(R.id.totalexpense);
                                 totalAmountTextView.setText(String.format("RM %.2f", totalExpense));
 
@@ -133,7 +139,6 @@ public class ExpenseActivity extends AppCompatActivity {
                                 recyclerView.setAdapter(adapter);
                             }
                         });
-
             }
 
             @Override

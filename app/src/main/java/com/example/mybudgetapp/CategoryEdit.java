@@ -37,10 +37,6 @@ public class CategoryEdit extends AppCompatActivity {
         catch (NullPointerException e){}
 
         User user = User.getUser_instance();
-        String user_id = user.getUser_id();
-        String username = user.getUsername();
-        String fullname = user.getFull_name();
-        String dob = user.getDob();
 
         String categoryId = getIntent().getStringExtra("category_id");
 
@@ -49,6 +45,7 @@ public class CategoryEdit extends AppCompatActivity {
         EditText edtdescription = findViewById(R.id.edt_description);
 
         db.collection("category")
+                .whereEqualTo("user_id", user.getUser_id())
                 .whereEqualTo("category_id", categoryId)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {

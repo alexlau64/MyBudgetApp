@@ -3,49 +3,66 @@ package com.example.mybudgetapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class ProfileActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    User user = User.getUser_instance();;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        TextView edtusername = findViewById(R.id.edtusername);
-        TextView edtfullname = findViewById(R.id.edtfullname);
-        TextView edtdob = findViewById(R.id.edtdob);
+        db.collection("users")
+                .document(user.getUser_id())
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String fullname = documentSnapshot.getString("fullname");
+                        String username = documentSnapshot.getString("username");
+                        Timestamp dobTimestamp = documentSnapshot.getTimestamp("dob");
 
-        User user = User.getUser_instance();
-        String fullname = user.getFull_name();
-        String username = user.getUsername();
-        String dob = user.getDob();
-        edtusername.setText(username);
-        edtfullname.setText(fullname);
-        edtdob.setText(dob);
+                        TextView edtusername = findViewById(R.id.edtusername);
+                        TextView edtfullname = findViewById(R.id.edtfullname);
+                        TextView edtdob = findViewById(R.id.edtdob);
+
+                        edtusername.setText(username);
+                        edtfullname.setText(fullname);
+
+                        if (dobTimestamp != null) {
+                            Date datetimeDate = dobTimestamp.toDate();
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+                            String formattedDate = dateFormat.format(datetimeDate);
+                            edtdob.setText(formattedDate);
+                        } else {
+                            edtdob.setText("Invalid Date");
+                        }
+                    } else {
+                        Toast.makeText(ProfileActivity.this, "Profile not found", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
         try
         {

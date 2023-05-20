@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -37,7 +38,11 @@ import com.google.firebase.storage.UploadTask;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.UUID;
 
 public class EditProfileActivity extends AppCompatActivity {
@@ -53,13 +58,38 @@ public class EditProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_profile);
 
         String user_id = user.getUser_id();
-        String username = user.getUsername();
+        /*String username = user.getUsername();
         String fullname = user.getFull_name();
-        String dob = user.getDob();
+        String dob = user.getDob();*/
 
         EditText edtusername = findViewById(R.id.edtusername);
         EditText edtfullname = findViewById(R.id.edtfullname);
         TextView edtdob = findViewById(R.id.edtdob);
+
+        db.collection("users")
+                .document(user.getUser_id())
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String fullname = documentSnapshot.getString("fullname");
+                        String username = documentSnapshot.getString("username");
+                        Timestamp dobTimestamp = documentSnapshot.getTimestamp("dob");
+
+                        edtusername.setText(username);
+                        edtfullname.setText(fullname);
+
+                        if (dobTimestamp != null) {
+                            Date datetimeDate = dobTimestamp.toDate();
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+                            String formattedDate = dateFormat.format(datetimeDate);
+                            edtdob.setText(formattedDate);
+                        } else {
+                            edtdob.setText("Invalid Date");
+                        }
+                    } else {
+                        Toast.makeText(EditProfileActivity.this, "Profile not found", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
         // Set an OnClickListener on the EditText to show the date picker dialog
         edtdob.setOnClickListener(new View.OnClickListener() {
@@ -77,8 +107,12 @@ public class EditProfileActivity extends AppCompatActivity {
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                                 // Update the EditText with the selected date
-                                String selectedDate = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
-                                edtdob.setText(selectedDate);
+                                Calendar selectedDate = Calendar.getInstance();
+                                selectedDate.set(year, monthOfYear, dayOfMonth);
+
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+                                String formattedDate = dateFormat.format(selectedDate.getTime());
+                                edtdob.setText(formattedDate);
                             }
                         }, year, month, day);
 
@@ -86,6 +120,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 datePickerDialog.show();
             }
         });
+
 
         img = findViewById(R.id.imageView);
         DocumentReference userRef = db.collection("users").document(user.getUser_id());
@@ -116,10 +151,9 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
-
-        edtusername.setText(username);
-        edtfullname.setText(fullname);
-        edtdob.setText(dob);
+        //edtusername.setText(username);
+        //edtfullname.setText(fullname);
+        //edtdob.setText(dob);
 
         try
         {
@@ -156,11 +190,18 @@ public class EditProfileActivity extends AppCompatActivity {
                                                     public void onSuccess(Uri uri) {
                                                         String imageUrl = uri.toString();
                                                         // Update the user profile with the image URL
+                                                        Timestamp dobTimestamp = null;
+                                                        try {
+                                                            dobTimestamp = new Timestamp(new SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).parse(txtdob));
+                                                        } catch (ParseException e) {
+                                                            throw new RuntimeException(e);
+                                                        }
+
                                                         db.collection("users")
                                                                 .document(user_id)
                                                                 .update(
                                                                         "fullname", txtfullname,
-                                                                        "dob", txtdob,
+                                                                        "dob", dobTimestamp,
                                                                         "username", txtusername,
                                                                         "image_url", imageUrl
                                                                 );
@@ -185,12 +226,19 @@ public class EditProfileActivity extends AppCompatActivity {
                                     }
                                 });
                     } else {
+                        // Convert dob to Timestamp
+                        Timestamp dobTimestamp = null;
+                        try {
+                            dobTimestamp = new Timestamp(new SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).parse(txtdob));
+                        } catch (ParseException e) {
+                            throw new RuntimeException(e);
+                        }
                         // Update the user profile without an image
                         db.collection("users")
                                 .document(user_id)
                                 .update(
                                         "fullname", txtfullname,
-                                        "dob", txtdob,
+                                        "dob", dobTimestamp,
                                         "username", txtusername
                                 );
                         // Update the current user session data

@@ -13,8 +13,13 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class ExpenseDetail extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -56,7 +61,14 @@ public class ExpenseDetail extends AppCompatActivity {
                             descriptionTextView.setText(expense.getDescription());
 
                             TextView datetimeTextView = findViewById(R.id.txtdatetime);
-                            datetimeTextView.setText(expense.getDate() + " " + expense.getTime());
+                            Timestamp datetimeTimestamp = expense.getDate();
+                            Date datetimeDate = datetimeTimestamp.toDate();
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+                            String formattedDate = dateFormat.format(datetimeDate);
+                            SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a", Locale.getDefault());
+                            String formattedTime = timeFormat.format(datetimeDate);
+                            String datetimeString = formattedDate + " " + formattedTime;
+                            datetimeTextView.setText(datetimeString);
 
                             ImageView imageView = findViewById(R.id.imageView);
                             String imageUrl = expense.getImage_url();
