@@ -133,7 +133,7 @@ public class Report extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedOption = options[position];
                 if(selectedOption.equals("Daily")){
-                    /*Calendar calendar = Calendar.getInstance();
+                    Calendar calendar = Calendar.getInstance();
                     String currentMonth = new SimpleDateFormat("MMMM", Locale.getDefault()).format(calendar.getTime());
                     db.collection("budget")
                             .whereEqualTo("month", currentMonth)
@@ -184,73 +184,90 @@ public class Report extends AppCompatActivity {
                                         Log.d(TAG, "Error getting budget: ", task.getException());
                                     }
                                 }
-                            });*/
+                            });
                 }
                 else if (selectedOption.equals("Monthly")) {
-                    /*Calendar calendar = Calendar.getInstance();
-                    String currentMonth = new SimpleDateFormat("MMMM", Locale.getDefault()).format(calendar.getTime());
-                    db.collection("budget")
-                            .whereEqualTo("month", currentMonth)
-                            .get()
-                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        double totalBudgetAmount = 0.0;
-                                        for (QueryDocumentSnapshot document : task.getResult()) {
-                                            double budgetAmount = document.getDouble("amount");
-                                            totalBudgetAmount += budgetAmount;
-                                        }
-                                        int year = calendar.get(Calendar.YEAR);
-                                        int month = calendar.get(Calendar.MONTH) + 1; // Months are zero-based in Calendar class
-                                        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);// Get the current day of the month
-                                        Calendar startOfMonth = Calendar.getInstance();
-                                        startOfMonth.set(year, month - 1, dayOfMonth, 0, 0, 0); // Set time to 00:00:00
-                                        Calendar endOfMonth = Calendar.getInstance();
-                                        endOfMonth.set(year, month - 1, dayOfMonth, 23, 59, 59); // Set time to 23:59:59
-                                        Date startDate = startOfMonth.getTime();
-                                        Date endDate = endOfMonth.getTime();
-                                        double finalTotalBudgetAmount = totalBudgetAmount;
-                                        List<DataEntry> seriesData = new ArrayList<>();
-                                        for (dayOfMonth = 1; dayOfMonth <= endOfMonth.get(Calendar.DAY_OF_MONTH); dayOfMonth++) {
-                                            Calendar dayStart = Calendar.getInstance();
-                                            dayStart.set(year, month - 1, dayOfMonth, 0, 0, 0);
-                                            Calendar dayEnd = Calendar.getInstance();
-                                            dayEnd.set(year, month - 1, dayOfMonth, 23, 59, 59);
-                                            Date dayStartDate = dayStart.getTime();
-                                            Date dayEndDate = dayEnd.getTime();
-                                            int finalDayOfMonth = dayOfMonth;
-                                            db.collection("expense")
-                                                    .whereGreaterThanOrEqualTo("date", dayStartDate)
-                                                    .whereLessThanOrEqualTo("date", dayEndDate)
-                                                    .get()
-                                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                        @Override
-                                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                            if (task.isSuccessful()) {
-                                                                double totalExpenseAmount = 0.0;
-                                                                for (QueryDocumentSnapshot expenseDocument : task.getResult()) {
-                                                                    double expenseAmount = expenseDocument.getDouble("amount");
-                                                                    totalExpenseAmount += expenseAmount;
-                                                                }
-                                                                CustomDataEntry dataEntry = new CustomDataEntry(String.valueOf(finalDayOfMonth), finalTotalBudgetAmount, totalExpenseAmount);
-                                                                seriesData.add(dataEntry);
+                    Calendar calendar = Calendar.getInstance();
+                    int year = calendar.get(Calendar.YEAR);
+                    int month = calendar.get(Calendar.MONTH) + 1;
+                    int finalYear = year;
+                    List<DataEntry> seriesData = new ArrayList<>();
+                    List<Task<?>> tasks = new ArrayList<>();
 
-                                                                // Check if this is the last day, then update the chart
-                                                                if (finalDayOfMonth == endOfMonth.get(Calendar.DAY_OF_MONTH)) {
-                                                                    updateChart(seriesData);
-                                                                }
-                                                            } else {
-                                                                Log.d(TAG, "Error getting expenses: ", task.getException());
-                                                            }
-                                                        }
-                                                    });
+                    for (int dayOfMonth = 1; dayOfMonth <= calendar.getActualMaximum(Calendar.DAY_OF_MONTH); dayOfMonth++) {
+                        int finalDayOfMonth = dayOfMonth;
+                        Calendar startOfDay = Calendar.getInstance();
+                        startOfDay.set(finalYear, month - 1, finalDayOfMonth, 0, 0, 0);
+                        Calendar endOfDay = Calendar.getInstance();
+                        endOfDay.set(finalYear, month - 1, finalDayOfMonth, 23, 59, 59);
+                        Date dayStartDate = startOfDay.getTime();
+                        Date dayEndDate = endOfDay.getTime();
+
+                        Task<QuerySnapshot> expenseTask = db.collection("expense")
+                                .whereGreaterThanOrEqualTo("date", dayStartDate)
+                                .whereLessThanOrEqualTo("date", dayEndDate)
+                                .get();
+                        tasks.add(expenseTask);
+                    }
+
+                    Task<QuerySnapshot> budgetTask = db.collection("budget")
+                            .whereEqualTo("month", getMonthName(month))
+                            .get();
+                    tasks.add(budgetTask);
+
+                    Tasks.whenAllComplete(tasks)
+                            .addOnCompleteListener(new OnCompleteListener<List<Task<?>>>() {
+                                @Override
+                                public void onComplete(@NonNull Task<List<Task<?>>> task) {
+                                    if (task.isSuccessful()) {
+                                        List<Double> totalExpenseAmounts = new ArrayList<>();
+                                        double totalBudgetAmount = 0.0;
+
+                                        // Handle expense query results
+                                        for (int i = 0; i < task.getResult().size() - 1; i++) {
+                                            Task<?> expenseTask = task.getResult().get(i);
+
+                                            if (expenseTask.isSuccessful()) {
+                                                QuerySnapshot expenseSnapshot = (QuerySnapshot) expenseTask.getResult();
+                                                double totalExpenseAmount = 0.0;
+                                                for (QueryDocumentSnapshot expenseDocument : expenseSnapshot) {
+                                                    double expenseAmount = expenseDocument.getDouble("amount");
+                                                    totalExpenseAmount += expenseAmount;
+                                                }
+                                                totalExpenseAmounts.add(totalExpenseAmount);
+                                            } else {
+                                                Log.d(TAG, "Error getting expenses: ", expenseTask.getException());
+                                            }
+                                        }
+
+                                        // Handle budget query result
+                                        Task<?> budgetTask = task.getResult().get(task.getResult().size() - 1);
+                                        if (budgetTask.isSuccessful()) {
+                                            QuerySnapshot budgetSnapshot = (QuerySnapshot) budgetTask.getResult();
+                                            for (QueryDocumentSnapshot document : budgetSnapshot) {
+                                                double budgetAmount = document.getDouble("amount");
+                                                totalBudgetAmount += budgetAmount;
+                                            }
+                                        } else {
+                                            Log.d(TAG, "Error getting budget: ", budgetTask.getException());
+                                        }
+
+                                        // Process the data
+                                        for (int dayOfMonth = 1; dayOfMonth <= calendar.getActualMaximum(Calendar.DAY_OF_MONTH); dayOfMonth++) {
+                                            int finalDayOfMonth = dayOfMonth;
+                                            double totalExpenseAmount = totalExpenseAmounts.get(dayOfMonth - 1);
+                                            CustomDataEntry dataEntry = new CustomDataEntry(String.valueOf(finalDayOfMonth), totalBudgetAmount, totalExpenseAmount);
+                                            seriesData.add(dataEntry);
+                                            if (finalDayOfMonth == calendar.getActualMaximum(Calendar.DAY_OF_MONTH)) {
+                                                updateChart(seriesData);
+                                            }
                                         }
                                     } else {
-                                        Log.d(TAG, "Error getting budget: ", task.getException());
+                                        Log.d(TAG, "Error merging tasks: ", task.getException());
                                     }
                                 }
-                            });*/
+                            });
+
                 }
                 else if (selectedOption.equals("Yearly")) {
                     Calendar calendar = Calendar.getInstance();
