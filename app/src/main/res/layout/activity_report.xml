@@ -68,6 +68,23 @@
 
         </androidx.cardview.widget.CardView>
 
+        <Button
+            android:id="@+id/btndownload"
+            android:layout_width="315dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/cardViewGraph"
+            android:layout_marginTop="200dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/rectangle_1"
+            android:drawablePadding="10dp"
+            android:gravity="center|center_vertical"
+            android:paddingLeft="30dp"
+            android:paddingEnd="30dp"
+            android:text="Download Report"
+            android:fontFamily="@font/montserrat"
+            android:textColor="#2743FB"
+            android:textSize="20sp" />
+
     </RelativeLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
