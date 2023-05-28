@@ -1,6 +1,7 @@
 package com.example.mybudgetapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -8,13 +9,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,6 +27,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -128,25 +134,74 @@ public class Home extends AppCompatActivity {
         });
 
         NavigationView navigationView = findViewById(R.id.drawer);
+        Menu menu = navigationView.getMenu();
+
+// Clear existing menu items
+        menu.clear();
+
+// Add custom menu items programmatically
+        menu.add(Menu.NONE, R.id.nav_budgets, Menu.NONE, "Budgets").setIcon(R.drawable.budgets);
+        menu.add(Menu.NONE, R.id.nav_expenses, Menu.NONE, "Expenses").setIcon(R.drawable.expenses);
+        menu.add(Menu.NONE, R.id.nav_categories, Menu.NONE, "Categories").setIcon(R.drawable.categories);
+        menu.add(Menu.NONE, R.id.nav_predictions, Menu.NONE, "Prediction and Recommendation").setIcon(R.drawable.predictions);
+
+// Get the menu and iterate through each menu item
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem menuItem = menu.getItem(i);
+
+            // Get the icon drawable for the menu item
+            Drawable icon = menuItem.getIcon();
+
+            // Create a new drawable with the desired color
+            icon = icon.mutate(); // Make sure the drawable is mutable
+            icon.setColorFilter(ContextCompat.getColor(this, R.color.menu_icon_color), PorterDuff.Mode.SRC_IN);
+
+            // Set the new icon to the menu item
+            menuItem.setIcon(icon);
+
+            // Create a SpannableString to apply color to the title
+            SpannableString spannableString = new SpannableString(menuItem.getTitle());
+            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.menu_icon_color)), 0, spannableString.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+
+            // Set the colored title to the menu item
+            menuItem.setTitle(spannableString);
+
+            menuItem.setActionView(R.layout.custom_menu_item);
+
+            // Get the custom layout views
+            View actionView = menuItem.getActionView();
+            TextView titleTextView = actionView.findViewById(R.id.menu_item_title);
+
+            // Set the title color
+            titleTextView.setTextColor(ContextCompat.getColor(this, R.color.menu_icon_color));
+
+            // Set the drawable end color (assuming the arrow drawable is at the end)
+            Drawable drawableEnd = menuItem.getIcon();
+            if (drawableEnd != null) {
+                drawableEnd.setColorFilter(ContextCompat.getColor(this, R.color.menu_icon_color), PorterDuff.Mode.SRC_IN);
+                menuItem.setIcon(drawableEnd);
+            }
+        }
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.nav_budgets:
-                        startActivity(new Intent(getApplicationContext(),BudgetActivity.class));
-                        overridePendingTransition(0,0);
+                        startActivity(new Intent(getApplicationContext(), BudgetActivity.class));
+                        overridePendingTransition(0, 0);
                         return true;
                     case R.id.nav_expenses:
                         startActivity(new Intent(getApplicationContext(), ExpenseActivity.class));
-                        overridePendingTransition(0,0);
+                        overridePendingTransition(0, 0);
                         return true;
                     case R.id.nav_categories:
                         startActivity(new Intent(getApplicationContext(), CategoryActivity.class));
-                        overridePendingTransition(0,0);
+                        overridePendingTransition(0, 0);
                         return true;
                     case R.id.nav_predictions:
                         startActivity(new Intent(getApplicationContext(), PredictionActivity.class));
-                        overridePendingTransition(0,0);
+                        overridePendingTransition(0, 0);
                         return true;
                     default:
                         return false;

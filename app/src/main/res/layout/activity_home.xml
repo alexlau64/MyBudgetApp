@@ -117,8 +117,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:itemTextColor="#2B47FC"
-        app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer" />
+        app:headerLayout="@layout/nav_header_main" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
 

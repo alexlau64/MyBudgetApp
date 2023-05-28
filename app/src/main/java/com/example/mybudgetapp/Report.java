@@ -133,7 +133,7 @@ public class Report extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedOption = options[position];
                 if(selectedOption.equals("Daily")){
-                    Calendar calendar = Calendar.getInstance();
+                    /*Calendar calendar = Calendar.getInstance();
                     String currentMonth = new SimpleDateFormat("MMMM", Locale.getDefault()).format(calendar.getTime());
                     db.collection("budget")
                             .whereEqualTo("month", currentMonth)
@@ -184,7 +184,7 @@ public class Report extends AppCompatActivity {
                                         Log.d(TAG, "Error getting budget: ", task.getException());
                                     }
                                 }
-                            });
+                            });*/
                 }
                 else if (selectedOption.equals("Monthly")) {
                     Calendar calendar = Calendar.getInstance();
@@ -193,6 +193,12 @@ public class Report extends AppCompatActivity {
                     int finalYear = year;
                     List<DataEntry> seriesData = new ArrayList<>();
                     List<Task<?>> tasks = new ArrayList<>();
+
+                    anyChartView.clear();
+                    // Customize the chart appearance or set default options
+                    anyChartView.setChart(null); // Set the chart to null
+                    // Redraw or refresh the chart
+                    anyChartView.invalidate();
 
                     for (int dayOfMonth = 1; dayOfMonth <= calendar.getActualMaximum(Calendar.DAY_OF_MONTH); dayOfMonth++) {
                         int finalDayOfMonth = dayOfMonth;
