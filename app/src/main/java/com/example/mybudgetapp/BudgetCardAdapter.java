@@ -2,8 +2,6 @@ package com.example.mybudgetapp;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,19 +13,24 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.text.DecimalFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class BudgetCardAdapter extends RecyclerView.Adapter<BudgetCardAdapter.ViewHolder> {
+    private static String selectedMonth;
     private List<DocumentSnapshot> budgetCards;
     private static Context context;
-    public BudgetCardAdapter(List<DocumentSnapshot> budgetCards, Context context) {
+    public BudgetCardAdapter(List<DocumentSnapshot> budgetCards, Context context, String selectedMonth) {
         this.budgetCards = budgetCards;
         this.context = context;
+        this.selectedMonth = selectedMonth;
     }
 
     @NonNull
@@ -78,8 +81,23 @@ public class BudgetCardAdapter extends RecyclerView.Adapter<BudgetCardAdapter.Vi
                         double totalExpenseAmount = 0.0;  // Assuming total expense amount is stored as a double value
 
                         for (QueryDocumentSnapshot expenseSnapshot : queryDocumentSnapshots) {
-                            double expenseAmount = expenseSnapshot.getDouble("amount");
-                            totalExpenseAmount += expenseAmount;
+                            // Retrieve the expense date and convert it to a Date object
+                            Timestamp timestamp = expenseSnapshot.getTimestamp("date");
+                            Date expenseDate = timestamp.toDate();
+
+                            // Check if the expense date falls within the selected month
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.setTime(expenseDate);
+                            int expenseMonth = calendar.get(Calendar.MONTH);
+
+                            // Convert the expense month to the full month name
+                            String expenseMonthName = getMonthName(expenseMonth);
+
+                            // Compare the expense month with the selected month
+                            if (selectedMonth.equalsIgnoreCase(expenseMonthName)) {
+                                double expenseAmount = expenseSnapshot.getDouble("amount");
+                                totalExpenseAmount += expenseAmount;
+                            }
                         }
 
                         // Set the total budget amount from the DocumentSnapshot
@@ -121,5 +139,16 @@ public class BudgetCardAdapter extends RecyclerView.Adapter<BudgetCardAdapter.Vi
                     });
         }
 
+    }
+
+    private static String getMonthName(int month) {
+        String[] monthNames = new String[] {
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+        };
+        if (month >= 0 && month < monthNames.length) {
+            return monthNames[month];
+        }
+        return "";
     }
 }

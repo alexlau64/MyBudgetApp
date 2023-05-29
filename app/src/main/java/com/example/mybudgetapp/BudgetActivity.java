@@ -26,6 +26,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class BudgetActivity extends AppCompatActivity {
@@ -75,6 +76,12 @@ public class BudgetActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_item_month1, month);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+        // Preselect the spinner item based on the current month
+        Calendar calendar = Calendar.getInstance();
+        int currentMonth = calendar.get(Calendar.MONTH);
+        String currentMonthName = getMonthName(currentMonth); // Replace with your method to get the month name
+        int preselectedPosition = adapter.getPosition(currentMonthName);
+        spinner.setSelection(preselectedPosition);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -125,5 +132,16 @@ public class BudgetActivity extends AppCompatActivity {
                 // Do nothing
             }
         });
+    }
+    
+    private String getMonthName(int month) {
+        String[] monthNames = new String[] {
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+        };
+        if (month >= 0 && month < monthNames.length) {
+            return monthNames[month];
+        }
+        return "";
     }
 }
