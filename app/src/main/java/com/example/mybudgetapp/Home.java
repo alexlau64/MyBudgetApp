@@ -63,6 +63,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -267,7 +268,7 @@ public class Home extends AppCompatActivity {
         legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM); // Set the legend alignment to bottom
         legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER); // Set the legend alignment to center
         legend.setOrientation(Legend.LegendOrientation.HORIZONTAL); // Set the legend orientation to horizontal
-        legend.setTextSize(14f);
+        legend.setTextSize(16f);
         legend.setDrawInside(false);
         legend.setEnabled(true);
 
@@ -297,7 +298,7 @@ public class Home extends AppCompatActivity {
                 String selectedMonth = parent.getItemAtPosition(position).toString();
                 // Retrieve expense data and calculate total amount per category
                 db.collection("expense")
-                        .whereEqualTo("user_id", User.getUser_id())
+                        .whereEqualTo("user_id", user.getUser_id())
                         .get()
                         .addOnSuccessListener(queryDocumentSnapshots -> {
                             List<PieEntry> entries = new ArrayList<>();
@@ -338,20 +339,55 @@ public class Home extends AppCompatActivity {
                             pieChart.notifyDataSetChanged();
                             pieChart.invalidate();
 
+                            // Create a reference to the "expense" collection
+                            CollectionReference expenseCollection = db.collection("expense");
+// Fetch the top 3 expenses data from Firestore
+                            expenseCollection
+                                    .orderBy("amount", Query.Direction.DESCENDING)
+                                    .limit(3)
+                                    .get()
+                                    .addOnSuccessListener(queryDocumentSnapshots2 -> {
+                                        List<DocumentSnapshot> topExpensesDocs = queryDocumentSnapshots2.getDocuments();
+                                        StringBuilder topExpensesText = new StringBuilder();
+                                        // Iterate over the top expenses documents
+                                        for (DocumentSnapshot document : topExpensesDocs) {
+                                            Timestamp expenseTimestamp = document.getTimestamp("date");
+                                            if (expenseTimestamp != null) {
+                                                Date expenseDate = expenseTimestamp.toDate();
+                                                Calendar expenseCalendar = Calendar.getInstance();
+                                                expenseCalendar.setTime(expenseDate);
+                                                int expenseMonth = expenseCalendar.get(Calendar.MONTH);
+                                                if (selectedMonth.equalsIgnoreCase(getMonthName(expenseMonth))) {
+                                                    String expenseName = document.getString("expense_name");
+                                                    double expenseAmount = document.getDouble("amount");
+                                                    topExpensesText.append(expenseName).append(": RM ").append(String.format("%.2f", expenseAmount)).append("\n");
+                                                }
+                                            }
+                                        }
+                                        // Update the TextView with the top 3 expenses
+                                        TextView topExpensesTextView = findViewById(R.id.topExpensesTextView);
+                                        topExpensesTextView.setText(topExpensesText.toString());
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        // Handle any errors that occurred while retrieving top expenses data
+                                    });
+
                             // Create a reference to the "budgets" collection (replace with your actual collection name)
                             CollectionReference budgetsCollection = db.collection("budget");
                             // Fetch the budget data from Firestore
-                            budgetsCollection.whereEqualTo("month", selectedMonth).get().addOnSuccessListener(queryDocumentSnapshots2 -> {
-                                List<DocumentSnapshot> budgetCards = queryDocumentSnapshots2.getDocuments();
-                                // Create a new instance of the adapter with the fetched budget data
-                                BudgetCardAdapter budgetCardAdapter = new BudgetCardAdapter(budgetCards, Home.this, selectedMonth);
-                                recyclerView.setLayoutManager(new LinearLayoutManager(Home.this));
-                                // Set the adapter on the RecyclerView
-                                recyclerView.setAdapter(budgetCardAdapter);
-                            }).addOnFailureListener(e -> {
-                                // Handle error fetching budget data from Firestore
-                                Log.e("YourActivity", "Failed to fetch budget data", e);
-                            });
+                            budgetsCollection
+                                    .whereEqualTo("user_id", user.getUser_id())
+                                    .whereEqualTo("month", selectedMonth).get().addOnSuccessListener(queryDocumentSnapshots2 -> {
+                                    List<DocumentSnapshot> budgetCards = queryDocumentSnapshots2.getDocuments();
+                                    // Create a new instance of the adapter with the fetched budget data
+                                    BudgetCardAdapter budgetCardAdapter = new BudgetCardAdapter(budgetCards, Home.this, selectedMonth);
+                                    recyclerView.setLayoutManager(new LinearLayoutManager(Home.this));
+                                    // Set the adapter on the RecyclerView
+                                    recyclerView.setAdapter(budgetCardAdapter);
+                                }).addOnFailureListener(e -> {
+                                    // Handle error fetching budget data from Firestore
+                                    Log.e("YourActivity", "Failed to fetch budget data", e);
+                                });
                         })
                         .addOnFailureListener(e -> {
                             // Handle any errors that occurred while retrieving expense data

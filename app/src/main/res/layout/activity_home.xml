@@ -77,10 +77,33 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-            <com.github.mikephil.charting.charts.PieChart
-                android:id="@+id/chart"
-                android:layout_width="match_parent"
-                android:layout_height="300dp" />
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/chart"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp" />
+
+                <TextView
+                    android:id="@+id/text6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_below="@id/chart"
+                    android:text="Top 3 Expenses"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:textSize="16sp"
+                    android:textColor="#3A3A3A"/>
+
+                <TextView
+                    android:id="@+id/topExpensesTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_below="@id/text6"
+                    android:fontFamily="@font/montserrat"
+                    android:textSize="16sp"
+                    android:textColor="#3A3A3A"/>
 
             </RelativeLayout>
 
