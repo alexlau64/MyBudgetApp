@@ -141,8 +141,12 @@ public class ExpenseAdd extends AppCompatActivity {
             }
         });
 
+        SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM", Locale.getDefault());
+        Date currentDate = new Date();
+        String currentMonth = monthFormat.format(currentDate);
         Spinner spinner = findViewById(R.id.spinner_budget);
         db.collection("budget")
+                .whereEqualTo("month", currentMonth)
                 .whereEqualTo("user_id", user.getUser_id())
                 .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override

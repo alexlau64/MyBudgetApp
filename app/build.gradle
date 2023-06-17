@@ -63,4 +63,5 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'org.tensorflow:tensorflow-lite:+'
     implementation 'com.github.AnyChart:AnyChart-Android:1.1.2'
+    implementation 'com.itextpdf:itextpdf:5.5.13'
 }
