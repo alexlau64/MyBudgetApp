@@ -266,7 +266,6 @@ public class Report extends AppCompatActivity {
                                     }
                                 }
                             });
-
                 }
                 else if (selectedOption.equals("Yearly")) {
                     Calendar calendar = Calendar.getInstance();
@@ -308,7 +307,7 @@ public class Report extends AppCompatActivity {
                                         // Handle query results
                                         for (int i = 0; i < task.getResult().size(); i += 2) {
                                             Task<?> expenseTask = task.getResult().get(i);
-                                            Task<?> budgetTask = task.getResult().get(i);
+                                            Task<?> budgetTask = task.getResult().get(i+1);
 
                                             if (expenseTask.isSuccessful()) {
                                                 QuerySnapshot expenseSnapshot = (QuerySnapshot) expenseTask.getResult();
@@ -749,14 +748,12 @@ public class Report extends AppCompatActivity {
                 }
             }
         });
-
-
     }
 
     private class CustomDataEntry extends ValueDataEntry {
-        CustomDataEntry(String x, Number value, Number value2) {
-            super(x, value);
-            setValue("value3", value2);
+        CustomDataEntry(String x, Number value2, Number value3) {
+            super(x, value2);
+            setValue("value3", value3);
         }
     }
 
