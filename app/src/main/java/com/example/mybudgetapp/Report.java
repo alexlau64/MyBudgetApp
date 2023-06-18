@@ -337,7 +337,7 @@ public class Report extends AppCompatActivity {
                                         } else {
                                             Log.d(TAG, "Error getting budget: ", budgetTask.getException());
                                         }
-                                        
+
                                         // Process the data
                                         for (int month = 1; month <= 12; month++) {
                                             int finalMonth = month;

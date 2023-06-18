@@ -99,7 +99,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 user.unset_user_session();
-                Intent intent = new Intent(ProfileActivity.this, LoginActivty.class);
+                Intent intent = new Intent(ProfileActivity.this, WelcomeBack.class);
                 startActivity(intent);
             }
         });
