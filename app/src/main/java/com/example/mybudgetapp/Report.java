@@ -277,9 +277,9 @@ public class Report extends AppCompatActivity {
                     for (int month = 1; month <= 12; month++) {
                         int finalMonth = month;
                         Calendar startOfMonth = Calendar.getInstance();
-                        startOfMonth.set(finalYear, finalMonth - 1, 1, 0, 0, 0); // Set time to the start of the month
+                        startOfMonth.set(finalYear, finalMonth - 1, 1, 0, 0, 0);
                         Calendar endOfMonth = Calendar.getInstance();
-                        endOfMonth.set(finalYear, finalMonth - 1, endOfMonth.getActualMaximum(Calendar.DAY_OF_MONTH), 23, 59, 59); // Set time to the end of the month
+                        endOfMonth.set(finalYear, finalMonth - 1, endOfMonth.getActualMaximum(Calendar.DAY_OF_MONTH), 23, 59, 59);
                         Date monthStartDate = startOfMonth.getTime();
                         Date monthEndDate = endOfMonth.getTime();
 
@@ -288,13 +288,11 @@ public class Report extends AppCompatActivity {
                                 .whereLessThanOrEqualTo("date", monthEndDate)
                                 .get();
                         tasks.add(expenseTask);
-
-                        Task<QuerySnapshot> budgetTask = db.collection("budget")
-                                .whereGreaterThanOrEqualTo("date", monthStartDate)
-                                .whereLessThanOrEqualTo("date", monthEndDate)
-                                .get();
-                        tasks.add(budgetTask);
                     }
+
+                    Task<QuerySnapshot> budgetTask = db.collection("budget")
+                            .get();
+                    tasks.add(budgetTask);
 
                     Tasks.whenAllComplete(tasks)
                             .addOnCompleteListener(new OnCompleteListener<List<Task<?>>>() {
@@ -304,10 +302,9 @@ public class Report extends AppCompatActivity {
                                         List<Double> totalExpenseAmounts = new ArrayList<>();
                                         List<Double> totalBudgetAmounts = new ArrayList<>();
 
-                                        // Handle query results
-                                        for (int i = 0; i < task.getResult().size(); i += 2) {
+                                        // Handle expense query results
+                                        for (int i = 0; i < task.getResult().size() - 1; i++) {
                                             Task<?> expenseTask = task.getResult().get(i);
-                                            Task<?> budgetTask = task.getResult().get(i+1);
 
                                             if (expenseTask.isSuccessful()) {
                                                 QuerySnapshot expenseSnapshot = (QuerySnapshot) expenseTask.getResult();
@@ -320,26 +317,35 @@ public class Report extends AppCompatActivity {
                                             } else {
                                                 Log.d(TAG, "Error getting expenses: ", expenseTask.getException());
                                             }
+                                        }
 
-                                            if (budgetTask.isSuccessful()) {
-                                                QuerySnapshot budgetSnapshot = (QuerySnapshot) budgetTask.getResult();
+                                        // Handle budget query result
+                                        Task<?> budgetTask = task.getResult().get(task.getResult().size() - 1);
+                                        if (budgetTask.isSuccessful()) {
+                                            QuerySnapshot budgetSnapshot = (QuerySnapshot) budgetTask.getResult();
+                                            for (int month = 1; month <= 12; month++) {
                                                 double totalBudgetAmount = 0.0;
                                                 for (QueryDocumentSnapshot document : budgetSnapshot) {
+                                                    String budgetMonth = document.getString("month");
                                                     double budgetAmount = document.getDouble("amount");
-                                                    totalBudgetAmount += budgetAmount;
+                                                    if (budgetMonth != null && budgetMonth.equals(getMonthName(month))) {
+                                                        totalBudgetAmount += budgetAmount;
+                                                    }
                                                 }
                                                 totalBudgetAmounts.add(totalBudgetAmount);
-                                            } else {
-                                                Log.d(TAG, "Error getting budget: ", budgetTask.getException());
                                             }
+                                        } else {
+                                            Log.d(TAG, "Error getting budget: ", budgetTask.getException());
                                         }
+
+
+
                                         // Process the data
                                         for (int month = 1; month <= 12; month++) {
                                             int finalMonth = month;
-                                            String monthName = getMonthName(finalMonth);
                                             double totalExpenseAmount = totalExpenseAmounts.get(month - 1);
                                             double totalBudgetAmount = totalBudgetAmounts.get(month - 1);
-                                            CustomDataEntry dataEntry = new CustomDataEntry(String.valueOf(monthName), totalBudgetAmount, totalExpenseAmount);
+                                            CustomDataEntry dataEntry = new CustomDataEntry(getMonthName(finalMonth), totalBudgetAmount, totalExpenseAmount);
                                             seriesData.add(dataEntry);
                                             if (finalMonth == 12) {
                                                 updateChart(seriesData);
@@ -784,7 +790,7 @@ public class Report extends AppCompatActivity {
         series2.tooltip().position("right").anchor(Anchor.LEFT_CENTER).offsetX(5d).offsetY(5d);
         series2.markers().enabled(true);
         series2.markers().type(MarkerType.CIRCLE).size(2d);
-        series2.stroke("#00FF00");
+        series2.stroke("#00008B");
 
         Line series3 = cartesian.line(series3Mapping);
         series3.name("Expense");
@@ -793,7 +799,7 @@ public class Report extends AppCompatActivity {
         series3.tooltip().position("right").anchor(Anchor.LEFT_CENTER).offsetX(5d).offsetY(5d);
         series3.markers().enabled(true);
         series3.markers().type(MarkerType.CIRCLE).size(2d);
-        series2.stroke("#0000FF");
+        series2.stroke("#FFD700");
 
         cartesian.legend().enabled(true);
         cartesian.legend().fontSize(13d);
