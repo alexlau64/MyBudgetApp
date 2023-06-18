@@ -75,8 +75,6 @@ public class Report extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
-        Toast.makeText(this,
-                user.getUser_id(), Toast.LENGTH_SHORT).show();
 
         try
         {
@@ -339,9 +337,7 @@ public class Report extends AppCompatActivity {
                                         } else {
                                             Log.d(TAG, "Error getting budget: ", budgetTask.getException());
                                         }
-
-
-
+                                        
                                         // Process the data
                                         for (int month = 1; month <= 12; month++) {
                                             int finalMonth = month;
