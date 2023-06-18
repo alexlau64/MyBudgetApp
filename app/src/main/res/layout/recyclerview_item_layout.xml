@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<LinearLayout android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:background="@drawable/item_background"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,7 +18,7 @@
             android:textSize="18sp"
             android:textColor="#1937FE"
             android:fontFamily="@font/montserrat"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/amountTextView"
@@ -28,23 +28,21 @@
             android:textColor="#1937FE"
             android:fontFamily="@font/montserrat"
             android:textSize="16sp"
-            android:drawableEnd="@drawable/arrow3"/>
+            android:drawableEnd="@drawable/arrow3" />
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/dateTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:textColor="#1937FE"
+        android:fontFamily="@font/montserrat"
+        android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/dateTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#1937FE"
-            android:fontFamily="@font/montserrat"
-            android:textSize="14sp" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#87CEEB" />
 
     </LinearLayout>
-
-</LinearLayout>
