@@ -20,6 +20,6 @@
         <item
             android:id="@+id/nav_predictions"
             android:icon="@drawable/predictions"
-            android:title="Prediction and Recommendation" />
+            android:title="Recommendations" />
     </group>
 </menu>

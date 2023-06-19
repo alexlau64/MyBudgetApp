@@ -15,7 +15,7 @@ public class BudgetPredictor {
 
     public BudgetPredictor(AssetManager assetManager) throws IOException {
         // Load the TensorFlow Lite model from the asset file
-        MappedByteBuffer modelBuffer = loadModelFile(assetManager, "trained_model.tflite");
+        MappedByteBuffer modelBuffer = loadModelFile(assetManager, "budget_prediction_model.tflite");
 
         // Create an instance of the Interpreter
         interpreter = new Interpreter(modelBuffer);

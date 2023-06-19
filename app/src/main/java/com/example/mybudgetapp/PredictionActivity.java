@@ -61,7 +61,12 @@ public class PredictionActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_item_month1, month);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-
+        // Preselect the spinner item based on the current month
+        Calendar calendar = Calendar.getInstance();
+        int currentMonth = calendar.get(Calendar.MONTH);
+        String currentMonthName = getMonthName(currentMonth); // Replace with your method to get the month name
+        int preselectedPosition = adapter.getPosition(currentMonthName);
+        spinner.setSelection(preselectedPosition);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

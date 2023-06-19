@@ -144,7 +144,7 @@ public class Home extends AppCompatActivity {
         menu.add(Menu.NONE, R.id.nav_budgets, Menu.NONE, "Budgets").setIcon(R.drawable.budgets);
         menu.add(Menu.NONE, R.id.nav_expenses, Menu.NONE, "Expenses").setIcon(R.drawable.expenses);
         menu.add(Menu.NONE, R.id.nav_categories, Menu.NONE, "Categories").setIcon(R.drawable.categories);
-        menu.add(Menu.NONE, R.id.nav_predictions, Menu.NONE, "Prediction and Recommendation").setIcon(R.drawable.predictions);
+        menu.add(Menu.NONE, R.id.nav_predictions, Menu.NONE, "Recommendations").setIcon(R.drawable.predictions);
 
 // Get the menu and iterate through each menu item
         for (int i = 0; i < menu.size(); i++) {
