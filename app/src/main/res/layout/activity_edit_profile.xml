@@ -20,9 +20,10 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="10dp"
         android:layout_below="@+id/imageView"
-        android:fontFamily="@font/montserrat"
         android:text="Username"
-        android:textColor="#000000" />
+        android:textSize="16sp"
+        android:textColor="#000000"
+        android:fontFamily="@font/montserrat"/>
 
     <EditText
         android:id="@+id/edtusername"
@@ -63,12 +64,24 @@
         android:fontFamily="@font/montserrat" />
 
     <TextView
+        android:id="@+id/txtdob"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edtfullname"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="10dp"
+        android:text="Date of Birth"
+        android:textSize="16sp"
+        android:textColor="#000000"
+        android:fontFamily="@font/montserrat" />
+
+    <TextView
         android:id="@+id/edtdob"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/edtfullname"
+        android:layout_below="@id/txtdob"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="30dp"
         android:paddingLeft="10dp"
         android:gravity="center_vertical"
